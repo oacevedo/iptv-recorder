@@ -11,6 +11,9 @@ public class Channel
     public string Group { get; set; } = "";
     public string Logo { get; set; } = "";
     public string Url { get; set; } = "";
+
+    // Nombre que exponen los lectores de pantalla y la automatización de la interfaz.
+    public override string ToString() => Name;
 }
 
 public enum RecordingStatus

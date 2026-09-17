@@ -11,6 +11,7 @@ release/
 *.suo
 *.swp
 
-# Test artifacts
+# Test artifacts (las capturas de docs/ sí se versionan)
 *.png
+!docs/*.png
 !app.ico

@@ -2,6 +2,20 @@
 
 Grabador de canales IPTV para Windows. Carga una lista M3U, busca el canal y programa la grabación con fecha, hora y duración. La app lanza `ffmpeg` sola cuando llega la hora y guarda el resultado en MP4.
 
+![Ventana principal](docs/screenshot-main.png)
+
+## Qué hace
+
+- **Lista de canales** (izquierda): se carga desde el enlace M3U del proveedor y queda en caché. Búsqueda por nombre y filtro por grupo.
+- **Vista previa** (arriba a la derecha): reproduce el canal dentro de la app antes de grabar, con volumen y silencio. "Abrir en VLC" lo abre en una ventana aparte.
+- **Nueva grabación**: título, fecha, hora y duración. "Programar" la deja en cola; "Grabar ahora" empieza al momento.
+- **Grabaciones**: estado en vivo de cada una. En la captura hay una completada, una en curso con tiempo y tamaño, y una pendiente para el día siguiente.
+- **Bandeja del sistema**: al cerrar o minimizar la app sigue funcionando y las grabaciones programadas se hacen igualmente.
+
+![Ajustes](docs/screenshot-settings.png)
+
+En **Ajustes** se elige el idioma (español o inglés), la carpeta de salida, si se convierte a MP4 al terminar, el margen de arranque antes de la hora, y si la app se inicia con Windows.
+
 ## Instalación
 
 Descarga el zip de la [página de releases](https://github.com/oacevedo/iptv-recorder/releases), descomprímelo en cualquier carpeta y abre `IptvRecorder.exe`. No hace falta instalar nada más: el paquete incluye .NET, el motor de VLC y ffmpeg. Solo Windows 10/11 de 64 bits.

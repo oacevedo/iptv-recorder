@@ -1,0 +1,140 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib">
+
+    <!-- Ventana principal -->
+    <sys:String x:Key="App_Title">IPTV Recorder</sys:String>
+    <sys:String x:Key="M3u_Label">Lista M3U:</sys:String>
+    <sys:String x:Key="M3u_Tip">Pega aquí el enlace M3U de tu proveedor</sys:String>
+    <sys:String x:Key="Btn_LoadList">Cargar lista</sys:String>
+    <sys:String x:Key="Btn_Settings">Ajustes</sys:String>
+    <sys:String x:Key="Channels_Header">Canales</sys:String>
+    <sys:String x:Key="Search_Tip">Buscar canal por nombre</sys:String>
+    <sys:String x:Key="Btn_OpenExternal">Abrir en VLC</sys:String>
+    <sys:String x:Key="Btn_OpenExternal_Tip">Abre el canal en VLC en una ventana aparte</sys:String>
+    <sys:String x:Key="Btn_Preview">Vista previa</sys:String>
+    <sys:String x:Key="Btn_Preview_Tip">Reproduce el canal en el panel de vista previa. También con doble clic.</sys:String>
+    <sys:String x:Key="Col_Channel">Canal</sys:String>
+    <sys:String x:Key="Col_Group">Grupo</sys:String>
+    <sys:String x:Key="Preview_Header">Vista previa</sys:String>
+    <sys:String x:Key="Preview_None">Ningún canal en reproducción</sys:String>
+    <sys:String x:Key="Preview_Placeholder">Selecciona un canal y pulsa "Vista previa"</sys:String>
+    <sys:String x:Key="Volume_Label">Volumen</sys:String>
+    <sys:String x:Key="Btn_Mute">Silencio</sys:String>
+    <sys:String x:Key="Btn_Stop">Detener</sys:String>
+    <sys:String x:Key="NewRec_Header">Nueva grabación</sys:String>
+    <sys:String x:Key="Channel_Label">Canal:</sys:String>
+    <sys:String x:Key="SelectChannel_Hint">(selecciona un canal en la lista)</sys:String>
+    <sys:String x:Key="Title_Label">Título:</sys:String>
+    <sys:String x:Key="Title_Tip">Nombre del archivo, por ejemplo: Real Madrid - Barcelona</sys:String>
+    <sys:String x:Key="Start_Label">Inicio:</sys:String>
+    <sys:String x:Key="Time_Tip">Hora en formato 24h, por ejemplo 20:55</sys:String>
+    <sys:String x:Key="Duration_Label">Duración:</sys:String>
+    <sys:String x:Key="Minutes_Short">min</sys:String>
+    <sys:String x:Key="Btn_RecordNow">Grabar ahora</sys:String>
+    <sys:String x:Key="Btn_Schedule">Programar</sys:String>
+    <sys:String x:Key="Recordings_Header">Grabaciones</sys:String>
+    <sys:String x:Key="Btn_Delete">Eliminar</sys:String>
+    <sys:String x:Key="Btn_ClearFinished">Limpiar terminadas</sys:String>
+    <sys:String x:Key="Btn_OpenFile">Abrir archivo</sys:String>
+    <sys:String x:Key="Btn_OpenFolder">Abrir carpeta</sys:String>
+    <sys:String x:Key="Col_Title">Título</sys:String>
+    <sys:String x:Key="Col_Start">Inicio</sys:String>
+    <sys:String x:Key="Col_Min">Min</sys:String>
+    <sys:String x:Key="Col_Status">Estado</sys:String>
+    <sys:String x:Key="Col_Detail">Detalle</sys:String>
+    <sys:String x:Key="Status_Ready">Listo</sys:String>
+
+    <!-- Estados de grabación -->
+    <sys:String x:Key="Rec_Pending">Pendiente</sys:String>
+    <sys:String x:Key="Rec_Recording">Grabando</sys:String>
+    <sys:String x:Key="Rec_Converting">Convirtiendo</sys:String>
+    <sys:String x:Key="Rec_Completed">Completada</sys:String>
+    <sys:String x:Key="Rec_Failed">Fallida</sys:String>
+    <sys:String x:Key="Rec_Cancelled">Cancelada</sys:String>
+
+    <!-- Mensajes de la ventana principal -->
+    <sys:String x:Key="Msg_PasteM3u">Pega el enlace M3U primero.</sys:String>
+    <sys:String x:Key="Status_Downloading">Descargando lista...</sys:String>
+    <sys:String x:Key="Msg_NoChannels">La lista se descargó pero no contiene canales reconocibles.</sys:String>
+    <sys:String x:Key="Msg_DownloadFailed">No se pudo descargar la lista:&#10;{0}</sys:String>
+    <sys:String x:Key="Status_LoadError">Error al cargar la lista</sys:String>
+    <sys:String x:Key="AllGroups">Todos los grupos</sys:String>
+    <sys:String x:Key="Channels_Count">{0} canales</sys:String>
+    <sys:String x:Key="Status_CacheLoaded">Lista cargada de la caché. Pulsa "Cargar lista" para actualizarla.</sys:String>
+    <sys:String x:Key="Status_ListLoaded">Lista cargada: {0} canales</sys:String>
+    <sys:String x:Key="Msg_SelectChannel">Selecciona un canal de la lista.</sys:String>
+    <sys:String x:Key="Msg_BadDuration">La duración debe ser un número de minutos entre 1 y 1440.</sys:String>
+    <sys:String x:Key="Msg_BadDateTime">Indica fecha y hora válidas (por ejemplo 20:55).</sys:String>
+    <sys:String x:Key="Msg_TimePassed">Esa hora ya ha pasado.</sys:String>
+    <sys:String x:Key="Status_Scheduled">Programada "{0}" para el {1} a las {2}</sys:String>
+    <sys:String x:Key="Status_Stopping">Deteniendo grabación...</sys:String>
+    <sys:String x:Key="Log_CancelledByUser">Cancelada por el usuario</sys:String>
+    <sys:String x:Key="Msg_StopBeforeDelete">Detén la grabación antes de eliminarla.</sys:String>
+    <sys:String x:Key="Status_FolderError">No se pudo abrir la carpeta: {0}</sys:String>
+    <sys:String x:Key="Status_SettingsSaved">Ajustes guardados</sys:String>
+    <sys:String x:Key="Msg_PreviewWhileRecording">Hay una grabación en curso. La vista previa abre otra conexión al proveedor y, si tu servicio solo permite una, puede cortar la grabación.&#10;&#10;¿Abrir la vista previa de todos modos?</sys:String>
+    <sys:String x:Key="Status_ExternalOpened">"{0}" abierto en {1}. Ciérralo antes de que empiece la grabación.</sys:String>
+    <sys:String x:Key="Status_PreviewStopped">Vista previa detenida</sys:String>
+    <sys:String x:Key="Status_PreviewStarted">Vista previa de "{0}". Se detendrá sola cuando empiece una grabación.</sys:String>
+    <sys:String x:Key="Msg_PreviewFailed">No se pudo iniciar la vista previa:&#10;{0}</sys:String>
+    <sys:String x:Key="Status_PreviewClosedForRecording">Vista previa cerrada para liberar la conexión: empieza la grabación de "{0}"</sys:String>
+    <sys:String x:Key="Tray_Open">Abrir</sys:String>
+    <sys:String x:Key="Tray_Exit">Salir</sys:String>
+    <sys:String x:Key="Tray_Balloon">Sigue en ejecución en la bandeja. Las grabaciones programadas se harán igualmente.</sys:String>
+    <sys:String x:Key="Msg_ExitRecording">Hay una grabación en curso. Si sales ahora se detendrá. ¿Salir de todos modos?</sys:String>
+    <sys:String x:Key="Msg_ExitPending">Hay grabaciones programadas que no se harán si la app está cerrada. ¿Salir de todos modos?</sys:String>
+    <sys:String x:Key="Status_FfmpegMissing">Aviso: no se encontró ffmpeg. Configura la ruta en Ajustes.</sys:String>
+    <sys:String x:Key="Err_VlcPlay">VLC no pudo reproducir el canal</sys:String>
+    <sys:String x:Key="Err_NoPlayer">No se encontró VLC ni ffplay. Indica un reproductor en Ajustes.</sys:String>
+
+    <!-- Planificador -->
+    <sys:String x:Key="Log_ClosedDuringRecording">La aplicación se cerró durante la grabación</sys:String>
+    <sys:String x:Key="Log_Missed">Se pasó la hora de inicio sin que la app estuviera abierta</sys:String>
+    <sys:String x:Key="Log_FfmpegMissing">No se encontró ffmpeg. Configura la ruta en Ajustes.</sys:String>
+    <sys:String x:Key="Log_OutputFolderError">No se pudo crear la carpeta de salida: {0}</sys:String>
+    <sys:String x:Key="Log_FfmpegStartError">No se pudo iniciar ffmpeg: {0}</sys:String>
+    <sys:String x:Key="Log_Connecting">Conectando...</sys:String>
+    <sys:String x:Key="Log_Recording">Grabando "{0}" -> {1}</sys:String>
+    <sys:String x:Key="Log_ExitNoData">ffmpeg terminó (código {0}) sin datos útiles: {1}</sys:String>
+    <sys:String x:Key="Log_Failed">Falló "{0}": {1}</sys:String>
+    <sys:String x:Key="Log_Converting">Convirtiendo a MP4...</sys:String>
+    <sys:String x:Key="Log_ConvertFailed">Conversión MP4 falló: {0}</sys:String>
+    <sys:String x:Key="Log_SavedAsTs">Se guardó como .ts (la conversión a MP4 falló)</sys:String>
+    <sys:String x:Key="Log_StoppedManually">Detenida manualmente ({0} MB)</sys:String>
+    <sys:String x:Key="Log_Completed">Completada ({0} MB)</sys:String>
+    <sys:String x:Key="Log_Finished">Terminada "{0}" -> {1}</sys:String>
+
+    <!-- Ventana de ajustes -->
+    <sys:String x:Key="Settings_Title">Ajustes</sys:String>
+    <sys:String x:Key="Set_Ffmpeg">Ruta de ffmpeg:</sys:String>
+    <sys:String x:Key="Set_Ffmpeg_Tip">Déjalo vacío para buscarlo automáticamente en el PATH</sys:String>
+    <sys:String x:Key="Btn_Browse">Examinar...</sys:String>
+    <sys:String x:Key="Set_Output">Carpeta de salida:</sys:String>
+    <sys:String x:Key="Set_Player">Reproductor (Abrir en VLC):</sys:String>
+    <sys:String x:Key="Set_Player_Tip">Déjalo vacío para usar VLC si está instalado, o ffplay en su defecto</sys:String>
+    <sys:String x:Key="Set_UA">User-Agent:</sys:String>
+    <sys:String x:Key="Set_UA_Tip">Algunos proveedores solo aceptan reproductores conocidos</sys:String>
+    <sys:String x:Key="Set_Lead">Empezar antes (segundos):</sys:String>
+    <sys:String x:Key="Set_Lead_Tip">Margen para que el stream enganche antes de que empiece el partido</sys:String>
+    <sys:String x:Key="Set_Language">Idioma:</sys:String>
+    <sys:String x:Key="Lang_Auto">Automático (sistema)</sys:String>
+    <sys:String x:Key="Set_Convert">Convertir a MP4 al terminar (sin recodificar, tarda unos segundos)</sys:String>
+    <sys:String x:Key="Set_Tray">Al cerrar o minimizar, seguir en la bandeja del sistema</sys:String>
+    <sys:String x:Key="Set_Autostart">Iniciar con Windows (en la bandeja)</sys:String>
+    <sys:String x:Key="Btn_Cancel">Cancelar</sys:String>
+    <sys:String x:Key="Btn_Save">Guardar</sys:String>
+    <sys:String x:Key="Set_Detected">Detectado automáticamente: {0}</sys:String>
+    <sys:String x:Key="Set_PlayerNotFound">No se encontró VLC ni ffplay</sys:String>
+    <sys:String x:Key="Dlg_SelectFfmpeg">Selecciona ffmpeg.exe</sys:String>
+    <sys:String x:Key="Dlg_SelectPlayer">Selecciona el reproductor para la vista previa</sys:String>
+    <sys:String x:Key="Dlg_OutputFolder">Carpeta donde se guardarán las grabaciones</sys:String>
+    <sys:String x:Key="Filter_Ffmpeg">ffmpeg.exe|ffmpeg.exe|Ejecutables|*.exe</sys:String>
+    <sys:String x:Key="Filter_Player">Reproductor|vlc.exe;ffplay.exe;*.exe</sys:String>
+    <sys:String x:Key="Msg_FfmpegMissingFile">No existe ese archivo de ffmpeg.</sys:String>
+    <sys:String x:Key="Msg_FfmpegNotInPath">No se encontró ffmpeg en el PATH. Indica la ruta a ffmpeg.exe.</sys:String>
+    <sys:String x:Key="Msg_PlayerMissingFile">No existe ese archivo de reproductor.</sys:String>
+    <sys:String x:Key="Msg_OutputRequired">Indica una carpeta de salida.</sys:String>
+    <sys:String x:Key="Msg_LeadRange">El margen de inicio debe estar entre 0 y 600 segundos.</sys:String>
+
+</ResourceDictionary>

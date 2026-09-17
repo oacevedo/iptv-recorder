@@ -1,0 +1,194 @@
+<Window x:Class="IptvRecorder.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vlc="clr-namespace:LibVLCSharp.WPF;assembly=LibVLCSharp.WPF"
+        xmlns:local="clr-namespace:IptvRecorder"
+        Title="{DynamicResource App_Title}" Height="860" Width="1240" MinHeight="700" MinWidth="960"
+        WindowStartupLocation="CenterScreen"
+        Closing="Window_Closing" StateChanged="Window_StateChanged">
+    <Window.Resources>
+        <local:RecordingStatusConverter x:Key="StatusConv"/>
+        <Style TargetType="Button">
+            <Setter Property="Padding" Value="12,4"/>
+            <Setter Property="Margin" Value="4,0,0,0"/>
+            <Setter Property="MinWidth" Value="90"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="Padding" Value="4,3"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="TextBlock" x:Key="Label">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,8,0"/>
+        </Style>
+    </Window.Resources>
+
+    <DockPanel Margin="10">
+
+        <Grid DockPanel.Dock="Top" Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{DynamicResource M3u_Label}" Style="{StaticResource Label}"/>
+            <TextBox x:Name="M3uUrlBox" Grid.Column="1" ToolTip="{DynamicResource M3u_Tip}"/>
+            <Button x:Name="LoadButton" Grid.Column="2" Content="{DynamicResource Btn_LoadList}" Click="LoadList_Click"/>
+            <TextBlock x:Name="ChannelCountText" Grid.Column="3" VerticalAlignment="Center" Margin="12,0" Foreground="Gray"/>
+            <Button Grid.Column="4" Content="{DynamicResource Btn_Settings}" Click="Settings_Click"/>
+        </Grid>
+
+        <StatusBar DockPanel.Dock="Bottom" Margin="0,8,0,0">
+            <TextBlock x:Name="StatusText" Text="{DynamicResource Status_Ready}"/>
+        </StatusBar>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" MinWidth="320"/>
+                <ColumnDefinition Width="6"/>
+                <ColumnDefinition Width="3*" MinWidth="480"/>
+            </Grid.ColumnDefinitions>
+
+            <DockPanel Grid.Column="0">
+                <TextBlock DockPanel.Dock="Top" Text="{DynamicResource Channels_Header}" FontWeight="Bold" Margin="0,0,0,4"/>
+                <Grid DockPanel.Dock="Top" Margin="0,0,0,6">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox x:Name="SearchBox" TextChanged="Filter_Changed" ToolTip="{DynamicResource Search_Tip}"/>
+                    <ComboBox x:Name="GroupFilter" Grid.Column="1" Width="170" Margin="4,0,0,0" SelectionChanged="Filter_Changed"/>
+                </Grid>
+                <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,6,0,0">
+                    <Button Content="{DynamicResource Btn_OpenExternal}" Click="OpenExternal_Click" ToolTip="{DynamicResource Btn_OpenExternal_Tip}"/>
+                    <Button Content="{DynamicResource Btn_Preview}" Click="Preview_Click" FontWeight="Bold" ToolTip="{DynamicResource Btn_Preview_Tip}"/>
+                </StackPanel>
+                <ListView x:Name="ChannelList" SelectionChanged="ChannelList_SelectionChanged" MouseDoubleClick="ChannelList_DoubleClick">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn Header="{DynamicResource Col_Channel}" Width="270" DisplayMemberBinding="{Binding Name}"/>
+                            <GridViewColumn Header="{DynamicResource Col_Group}" Width="170" DisplayMemberBinding="{Binding Group}"/>
+                        </GridView>
+                    </ListView.View>
+                </ListView>
+            </DockPanel>
+
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Background="Transparent"/>
+
+            <Grid Grid.Column="2" Margin="6,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <GroupBox Grid.Row="0" Header="{DynamicResource Preview_Header}" Padding="8,4,8,8" Margin="0,0,0,10">
+                    <DockPanel>
+                        <Grid DockPanel.Dock="Bottom" Margin="0,6,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock x:Name="PreviewChannelText" Text="{DynamicResource Preview_None}" Foreground="Gray" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                <TextBlock Text="{DynamicResource Volume_Label}" Style="{StaticResource Label}"/>
+                                <Slider x:Name="VolumeSlider" Width="110" Minimum="0" Maximum="100" Value="70" VerticalAlignment="Center" ValueChanged="Volume_Changed"/>
+                                <ToggleButton x:Name="MuteButton" Content="{DynamicResource Btn_Mute}" Padding="12,4" Margin="8,0,0,0" MinWidth="70" Click="Mute_Click"/>
+                                <Button Content="{DynamicResource Btn_Stop}" Click="StopPreview_Click"/>
+                            </StackPanel>
+                        </Grid>
+                        <Border Background="Black" Height="270" CornerRadius="2">
+                            <Grid>
+                                <TextBlock x:Name="PreviewPlaceholder" Text="{DynamicResource Preview_Placeholder}"
+                                           Foreground="#888" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <vlc:VideoView x:Name="VideoView" Visibility="Collapsed"/>
+                            </Grid>
+                        </Border>
+                    </DockPanel>
+                </GroupBox>
+
+                <GroupBox Grid.Row="1" Header="{DynamicResource NewRec_Header}" Padding="10,6,10,10" Margin="0,0,0,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <TextBlock Grid.Row="0" Grid.Column="0" Text="{DynamicResource Channel_Label}" Style="{StaticResource Label}"/>
+                        <TextBlock x:Name="SelectedChannelText" Grid.Row="0" Grid.Column="1"
+                                   Text="{DynamicResource SelectChannel_Hint}" Foreground="Gray" VerticalAlignment="Center" Margin="0,4"/>
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="{DynamicResource Title_Label}" Style="{StaticResource Label}"/>
+                        <TextBox x:Name="TitleBox" Grid.Row="1" Grid.Column="1" Margin="0,4" ToolTip="{DynamicResource Title_Tip}"/>
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="{DynamicResource Start_Label}" Style="{StaticResource Label}"/>
+                        <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal" Margin="0,4">
+                            <DatePicker x:Name="DateBox" Width="160"/>
+                            <TextBox x:Name="TimeBox" Width="70" Margin="6,0,0,0" ToolTip="{DynamicResource Time_Tip}" TextAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource Duration_Label}" Style="{StaticResource Label}" Margin="18,0,8,0"/>
+                            <TextBox x:Name="DurationBox" Width="60" Text="135" TextAlignment="Center"/>
+                            <TextBlock Text="{DynamicResource Minutes_Short}" Style="{StaticResource Label}" Margin="6,0,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
+                            <Button Content="{DynamicResource Btn_RecordNow}" Click="RecordNow_Click"/>
+                            <Button Content="{DynamicResource Btn_Schedule}" Click="Schedule_Click" FontWeight="Bold"/>
+                        </StackPanel>
+                    </Grid>
+                </GroupBox>
+
+                <DockPanel Grid.Row="2">
+                    <TextBlock DockPanel.Dock="Top" Text="{DynamicResource Recordings_Header}" FontWeight="Bold" Margin="0,0,0,4"/>
+                    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,6,0,0">
+                        <Button Content="{DynamicResource Btn_Stop}" Click="Stop_Click"/>
+                        <Button Content="{DynamicResource Btn_Delete}" Click="Delete_Click"/>
+                        <Button Content="{DynamicResource Btn_ClearFinished}" Click="ClearFinished_Click"/>
+                        <Button Content="{DynamicResource Btn_OpenFile}" Click="OpenFile_Click"/>
+                        <Button Content="{DynamicResource Btn_OpenFolder}" Click="OpenFolder_Click"/>
+                    </StackPanel>
+                    <DataGrid x:Name="RecordingsGrid" AutoGenerateColumns="False" IsReadOnly="True"
+                              SelectionMode="Single" CanUserAddRows="False" HeadersVisibility="Column"
+                              GridLinesVisibility="Horizontal" RowHeaderWidth="0">
+                        <DataGrid.RowStyle>
+                            <Style TargetType="DataGridRow">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Status}" Value="Recording">
+                                        <Setter Property="Background" Value="#FFE0E0"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Status}" Value="Converting">
+                                        <Setter Property="Background" Value="#FFF4D6"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Status}" Value="Completed">
+                                        <Setter Property="Background" Value="#E3F5E1"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Status}" Value="Failed">
+                                        <Setter Property="Foreground" Value="#B00020"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Status}" Value="Cancelled">
+                                        <Setter Property="Foreground" Value="Gray"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </DataGrid.RowStyle>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="{DynamicResource Col_Title}" Binding="{Binding Title}" Width="1.5*"/>
+                            <DataGridTextColumn Header="{DynamicResource Col_Channel}" Binding="{Binding ChannelName}" Width="1.2*"/>
+                            <DataGridTextColumn Header="{DynamicResource Col_Start}" Binding="{Binding Start, StringFormat=dd/MM HH:mm}" Width="90"/>
+                            <DataGridTextColumn Header="{DynamicResource Col_Min}" Binding="{Binding DurationMinutes}" Width="45"/>
+                            <DataGridTextColumn Header="{DynamicResource Col_Status}" Binding="{Binding Status, Converter={StaticResource StatusConv}}" Width="90"/>
+                            <DataGridTextColumn Header="{DynamicResource Col_Detail}" Binding="{Binding LastLog}" Width="2*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </Grid>
+        </Grid>
+    </DockPanel>
+</Window>

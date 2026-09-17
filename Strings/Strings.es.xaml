@@ -22,6 +22,9 @@
     <sys:String x:Key="Volume_Label">Volumen</sys:String>
     <sys:String x:Key="Btn_Mute">Silencio</sys:String>
     <sys:String x:Key="Btn_Stop">Detener</sys:String>
+    <sys:String x:Key="Btn_WatchRecording">Ver grabación</sys:String>
+    <sys:String x:Key="Btn_WatchRecording_Tip">Ve la grabación seleccionada mientras se graba, sin abrir otra conexión al proveedor</sys:String>
+    <sys:String x:Key="Preview_Live">{0} (grabando)</sys:String>
     <sys:String x:Key="NewRec_Header">Nueva grabación</sys:String>
     <sys:String x:Key="Channel_Label">Canal:</sys:String>
     <sys:String x:Key="SelectChannel_Hint">(selecciona un canal en la lista)</sys:String>
@@ -73,9 +76,13 @@
     <sys:String x:Key="Msg_StopBeforeDelete">Detén la grabación antes de eliminarla.</sys:String>
     <sys:String x:Key="Status_FolderError">No se pudo abrir la carpeta: {0}</sys:String>
     <sys:String x:Key="Status_SettingsSaved">Ajustes guardados</sys:String>
-    <sys:String x:Key="Msg_PreviewWhileRecording">Hay una grabación en curso. La vista previa abre otra conexión al proveedor y, si tu servicio solo permite una, puede cortar la grabación.&#10;&#10;¿Abrir la vista previa de todos modos?</sys:String>
+    <sys:String x:Key="Msg_PreviewWhileRecording">Hay una grabación en curso. La vista previa de otro canal abre otra conexión al proveedor y, si tu servicio solo permite una, puede cortar la grabación.&#10;&#10;Para ver lo que se está grabando, usa "Ver grabación": no consume otra conexión.&#10;&#10;¿Abrir la vista previa de todos modos?</sys:String>
     <sys:String x:Key="Status_ExternalOpened">"{0}" abierto en {1}. Ciérralo antes de que empiece la grabación.</sys:String>
     <sys:String x:Key="Status_PreviewStopped">Vista previa detenida</sys:String>
+    <sys:String x:Key="Status_WatchingRecording">Viendo "{0}" desde la propia grabación, sin abrir otra conexión al proveedor</sys:String>
+    <sys:String x:Key="Status_SwitchingToRecording">Empieza la grabación de "{0}". Cambiando la vista previa a la propia grabación...</sys:String>
+    <sys:String x:Key="Msg_SelectActiveRecording">Selecciona en la lista una grabación que esté en curso.</sys:String>
+    <sys:String x:Key="Msg_LiveUnavailable">Esta grabación no tiene emisión local disponible. Vuelve a iniciarla para poder verla mientras se graba.</sys:String>
     <sys:String x:Key="Status_PreviewStarted">Vista previa de "{0}". Se detendrá sola cuando empiece una grabación.</sys:String>
     <sys:String x:Key="Msg_PreviewFailed">No se pudo iniciar la vista previa:&#10;{0}</sys:String>
     <sys:String x:Key="Status_PreviewClosedForRecording">Vista previa cerrada para liberar la conexión: empieza la grabación de "{0}"</sys:String>

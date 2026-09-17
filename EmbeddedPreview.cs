@@ -30,12 +30,16 @@ public class EmbeddedPreview : IDisposable
         _view.MediaPlayer = _player;
     }
 
-    public void Play(Channel channel, int volume, bool mute)
+    public void Play(Channel channel, int volume, bool mute) => Play(channel.Url, volume, mute);
+
+    public void Play(string url, int volume, bool mute)
     {
         EnsureInitialized();
-        using var media = new Media(_libVlc!, new Uri(channel.Url));
-        if (channel.Url.StartsWith("http", StringComparison.OrdinalIgnoreCase))
+        using var media = new Media(_libVlc!, new Uri(url));
+        if (url.StartsWith("http", StringComparison.OrdinalIgnoreCase))
             media.AddOption(":http-user-agent=" + _userAgent);
+        if (url.StartsWith("udp", StringComparison.OrdinalIgnoreCase))
+            media.AddOption(":network-caching=1000");
         _player!.Volume = volume;
         _player.Mute = mute;
         _player.Play(media);

@@ -12,6 +12,7 @@ public class RecordingScheduler : IDisposable
     private readonly ObservableCollection<Recording> _recordings;
     private readonly Func<AppSettings> _settings;
     private readonly Dictionary<Guid, Process> _procs = new();
+    private readonly Dictionary<Guid, LiveRelay> _relays = new();
     private readonly HashSet<Guid> _stopRequested = new();
     private readonly DispatcherTimer _timer;
 
@@ -171,10 +172,24 @@ public class RecordingScheduler : IDisposable
             a.Add("-rw_timeout"); a.Add("20000000");
         }
         a.Add("-i"); a.Add(r.ChannelUrl);
+
+        // Salida principal: el archivo. La selección de pistas es la de siempre.
         a.Add("-c"); a.Add("copy");
         a.Add("-t"); a.Add(seconds.ToString());
         a.Add("-f"); a.Add("mpegts");
         a.Add(tsFile);
+
+        // Segunda salida: una copia a un puerto local, para poder ver la grabación en
+        // curso sin abrir otra conexión al proveedor.
+        LiveRelay? relay = null;
+        try { relay = new LiveRelay(); } catch { }
+        if (relay != null)
+        {
+            a.Add("-c"); a.Add("copy");
+            a.Add("-t"); a.Add(seconds.ToString());
+            a.Add("-f"); a.Add("mpegts");
+            a.Add($"udp://127.0.0.1:{relay.SourcePort}?pkt_size=1316");
+        }
 
         Starting?.Invoke(r);
 
@@ -187,6 +202,7 @@ public class RecordingScheduler : IDisposable
         }
         catch (Exception ex)
         {
+            relay?.Dispose();
             r.Status = RecordingStatus.Failed;
             r.LastLog = Loc.Get("Log_FfmpegStartError", ex.Message);
             Changed?.Invoke();
@@ -194,6 +210,11 @@ public class RecordingScheduler : IDisposable
         }
 
         _procs[r.Id] = proc;
+        if (relay != null)
+        {
+            _relays[r.Id] = relay;
+            r.LiveUrl = relay.PlaybackUrl;
+        }
         r.OutputFile = tsFile;
         r.Status = RecordingStatus.Recording;
         r.LastLog = Loc.Get("Log_Connecting");
@@ -266,6 +287,8 @@ public class RecordingScheduler : IDisposable
         {
             _procs.Remove(r.Id);
             _stopRequested.Remove(r.Id);
+            if (_relays.Remove(r.Id, out var relay)) relay.Dispose();
+            r.LiveUrl = "";
 
             if (size < 200_000)
             {
@@ -373,5 +396,7 @@ public class RecordingScheduler : IDisposable
             try { if (!p.WaitForExit(5000)) p.Kill(true); } catch { }
         }
         _procs.Clear();
+        foreach (var relay in _relays.Values.ToList()) relay.Dispose();
+        _relays.Clear();
     }
 }

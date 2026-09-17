@@ -22,6 +22,9 @@
     <sys:String x:Key="Volume_Label">Volume</sys:String>
     <sys:String x:Key="Btn_Mute">Mute</sys:String>
     <sys:String x:Key="Btn_Stop">Stop</sys:String>
+    <sys:String x:Key="Btn_WatchRecording">Watch recording</sys:String>
+    <sys:String x:Key="Btn_WatchRecording_Tip">Watch the selected recording as it records, without opening another connection to the provider</sys:String>
+    <sys:String x:Key="Preview_Live">{0} (recording)</sys:String>
     <sys:String x:Key="NewRec_Header">New recording</sys:String>
     <sys:String x:Key="Channel_Label">Channel:</sys:String>
     <sys:String x:Key="SelectChannel_Hint">(select a channel from the list)</sys:String>
@@ -73,9 +76,13 @@
     <sys:String x:Key="Msg_StopBeforeDelete">Stop the recording before deleting it.</sys:String>
     <sys:String x:Key="Status_FolderError">Could not open the folder: {0}</sys:String>
     <sys:String x:Key="Status_SettingsSaved">Settings saved</sys:String>
-    <sys:String x:Key="Msg_PreviewWhileRecording">A recording is in progress. The preview opens another connection to the provider and, if your service only allows one, it may cut the recording.&#10;&#10;Open the preview anyway?</sys:String>
+    <sys:String x:Key="Msg_PreviewWhileRecording">A recording is in progress. Previewing another channel opens a second connection to the provider and, if your service only allows one, it may cut the recording.&#10;&#10;To watch what is being recorded, use "Watch recording": it uses no extra connection.&#10;&#10;Open the preview anyway?</sys:String>
     <sys:String x:Key="Status_ExternalOpened">"{0}" opened in {1}. Close it before the recording starts.</sys:String>
     <sys:String x:Key="Status_PreviewStopped">Preview stopped</sys:String>
+    <sys:String x:Key="Status_WatchingRecording">Watching "{0}" from the recording itself, without a second connection to the provider</sys:String>
+    <sys:String x:Key="Status_SwitchingToRecording">Recording of "{0}" is starting. Switching the preview to the recording itself...</sys:String>
+    <sys:String x:Key="Msg_SelectActiveRecording">Select a recording that is currently in progress.</sys:String>
+    <sys:String x:Key="Msg_LiveUnavailable">This recording has no local feed available. Start it again to watch it while it records.</sys:String>
     <sys:String x:Key="Status_PreviewStarted">Previewing "{0}". It will stop by itself when a recording starts.</sys:String>
     <sys:String x:Key="Msg_PreviewFailed">Could not start the preview:&#10;{0}</sys:String>
     <sys:String x:Key="Status_PreviewClosedForRecording">Preview closed to free the connection: recording of "{0}" is starting</sys:String>

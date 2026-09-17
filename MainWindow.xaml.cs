@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Threading;
 using WinForms = System.Windows.Forms;
 
 namespace IptvRecorder;
@@ -20,6 +21,7 @@ public partial class MainWindow : Window
     private EmbeddedPreview? _preview;
     private List<Channel> _channels = new();
     private Channel? _selected;
+    private string _previewUrl = "";
     private WinForms.NotifyIcon? _tray;
     private WinForms.ToolStripMenuItem? _trayOpen;
     private WinForms.ToolStripMenuItem? _trayExit;
@@ -43,10 +45,15 @@ public partial class MainWindow : Window
         _scheduler.Changed += () => Store.SaveRecordings(_recordings);
         _scheduler.Starting += r =>
         {
+            // Si se estaba viendo justo ese canal, se sigue viendo desde la propia
+            // grabación en cuanto ffmpeg empieza a emitir al puerto local.
+            var sameChannel = (_preview?.IsPlaying ?? false) && _previewUrl == r.ChannelUrl;
             var wasOpen = _external.IsRunning || (_preview?.IsPlaying ?? false);
             _external.Stop();
             StopEmbeddedPreview();
-            if (wasOpen) SetStatus(Loc.Get("Status_PreviewClosedForRecording", r.Title));
+
+            if (sameChannel) ScheduleLiveSwitch(r);
+            else if (wasOpen) SetStatus(Loc.Get("Status_PreviewClosedForRecording", r.Title));
         };
 
         _preview = new EmbeddedPreview(VideoView, _settings.UserAgent);
@@ -258,6 +265,7 @@ public partial class MainWindow : Window
             _preview.SetUserAgent(_settings.UserAgent);
             PreviewPlaceholder.Visibility = Visibility.Collapsed;
             VideoView.Visibility = Visibility.Visible;
+            _previewUrl = channel.Url;
             _preview.Play(channel, (int)VolumeSlider.Value, MuteButton.IsChecked == true);
             PreviewChannelText.Text = channel.Name;
             PreviewChannelText.Foreground = System.Windows.Media.Brushes.Black;
@@ -270,8 +278,61 @@ public partial class MainWindow : Window
         }
     }
 
+    /// <summary>Ver una grabación en curso: el flujo llega del puerto local que alimenta
+    /// ffmpeg, así que no se abre ninguna conexión adicional al proveedor.</summary>
+    private void WatchRecording_Click(object sender, RoutedEventArgs e)
+    {
+        if (RecordingsGrid.SelectedItem is not Recording r || r.Status != RecordingStatus.Recording)
+        {
+            Info(this, "Msg_SelectActiveRecording");
+            return;
+        }
+        if (r.LiveUrl.Length == 0)
+        {
+            Info(this, "Msg_LiveUnavailable");
+            return;
+        }
+        WatchLive(r);
+    }
+
+    private void WatchLive(Recording r)
+    {
+        if (_preview == null || r.LiveUrl.Length == 0) return;
+        _external.Stop();
+        try
+        {
+            PreviewPlaceholder.Visibility = Visibility.Collapsed;
+            VideoView.Visibility = Visibility.Visible;
+            _previewUrl = r.LiveUrl;
+            _preview.Play(r.LiveUrl, (int)VolumeSlider.Value, MuteButton.IsChecked == true);
+            PreviewChannelText.Text = Loc.Get("Preview_Live", r.ChannelName);
+            PreviewChannelText.Foreground = System.Windows.Media.Brushes.Black;
+            SetStatus(Loc.Get("Status_WatchingRecording", r.Title));
+        }
+        catch (Exception ex)
+        {
+            StopEmbeddedPreview();
+            MessageBox.Show(this, Loc.Get("Msg_PreviewFailed", ex.Message), Loc.Get("App_Title"), MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    /// <summary>ffmpeg tarda unos segundos en emitir los primeros paquetes, así que el
+    /// cambio a la grabación se hace con un pequeño retardo.</summary>
+    private void ScheduleLiveSwitch(Recording r)
+    {
+        SetStatus(Loc.Get("Status_SwitchingToRecording", r.Title));
+        var timer = new DispatcherTimer { Interval = TimeSpan.FromSeconds(5) };
+        timer.Tick += (_, _) =>
+        {
+            timer.Stop();
+            if (r.Status == RecordingStatus.Recording && r.LiveUrl.Length > 0) WatchLive(r);
+        };
+        timer.Start();
+    }
+
     private void StopEmbeddedPreview()
     {
+        _previewUrl = "";
         _preview?.Stop();
         VideoView.Visibility = Visibility.Collapsed;
         PreviewPlaceholder.Visibility = Visibility.Visible;

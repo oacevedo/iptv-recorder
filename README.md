@@ -8,6 +8,7 @@ Grabador de canales IPTV para Windows. Carga una lista M3U, busca el canal y pro
 
 - **Lista de canales** (izquierda): se carga desde el enlace M3U del proveedor y queda en caché. Búsqueda por nombre y filtro por grupo.
 - **Vista previa** (arriba a la derecha): reproduce el canal dentro de la app antes de grabar, con volumen y silencio. "Abrir en VLC" lo abre en una ventana aparte.
+- **Ver mientras se graba**: el botón "Ver grabación" muestra lo que se está grabando en ese momento. No abre una segunda conexión al proveedor, así que no interfiere con la grabación aunque tu servicio solo permita una conexión. Si ya estabas viendo el canal cuando arranca su grabación programada, la imagen vuelve sola a los pocos segundos.
 - **Nueva grabación**: título, fecha, hora y duración. "Programar" la deja en cola; "Grabar ahora" empieza al momento.
 - **Grabaciones**: estado en vivo de cada una. En la captura hay una completada, una en curso con tiempo y tamaño, y una pendiente para el día siguiente.
 - **Bandeja del sistema**: al cerrar o minimizar la app sigue funcionando y las grabaciones programadas se hacen igualmente.
@@ -52,7 +53,7 @@ Para añadir otro idioma: copia `Strings\Strings.en.xaml` como `Strings\Strings.
 
 ## Limitaciones
 
-- Casi todos los proveedores limitan las conexiones simultáneas. Una grabación cuenta como una conexión: no veas otro canal del mismo servicio mientras grabas.
+- Casi todos los proveedores limitan las conexiones simultáneas. Una grabación cuenta como una conexión: no veas **otro** canal del mismo servicio mientras grabas. Ver la propia grabación con "Ver grabación" sí es seguro, porque no abre ninguna conexión adicional.
 - Si el PC está apagado o suspendido a la hora programada, la grabación no se hace. Desactiva la suspensión automática si programas de noche.
 - Las URLs de la lista cambian a veces. Si una grabación falla con error de conexión, vuelve a cargar la lista y programa de nuevo.
 

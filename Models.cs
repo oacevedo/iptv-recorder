@@ -63,6 +63,15 @@ public class Recording : INotifyPropertyChanged
     [JsonIgnore]
     public bool IsActive => Status is RecordingStatus.Recording or RecordingStatus.Converting;
 
+    private string _liveUrl = "";
+    /// <summary>Dirección local para ver la grabación en curso; vacía si no se está grabando.</summary>
+    [JsonIgnore]
+    public string LiveUrl
+    {
+        get => _liveUrl;
+        set { _liveUrl = value; OnPropertyChanged(); }
+    }
+
     public event PropertyChangedEventHandler? PropertyChanged;
     private void OnPropertyChanged([CallerMemberName] string? name = null)
         => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));

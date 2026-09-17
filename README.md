@@ -2,15 +2,15 @@
 
 Grabador de canales IPTV para Windows. Carga una lista M3U, busca el canal y programa la grabación con fecha, hora y duración. La app lanza `ffmpeg` sola cuando llega la hora y guarda el resultado en MP4.
 
-## Requisitos
+## Instalación
 
-- Windows 10/11
-- [.NET 10 Desktop Runtime](https://dotnet.microsoft.com/download/dotnet/10.0) (ya lo tienes si tienes el SDK)
-- `ffmpeg` en el PATH o indicado en Ajustes (`winget install ffmpeg`)
+Descarga el zip de la [página de releases](https://github.com/oacevedo/iptv-recorder/releases), descomprímelo en cualquier carpeta y abre `IptvRecorder.exe`. No hace falta instalar nada más: el paquete incluye .NET, el motor de VLC y ffmpeg. Solo Windows 10/11 de 64 bits.
+
+Si compilas desde el código fuente, necesitas el [SDK de .NET 10](https://dotnet.microsoft.com/download/dotnet/10.0) y `ffmpeg` en el PATH o indicado en Ajustes (`winget install ffmpeg`).
 
 ## Uso
 
-1. Ejecuta `dist\IptvRecorder.exe`.
+1. Abre `IptvRecorder.exe`.
 2. Pega el enlace M3U arriba y pulsa **Cargar lista**. La lista queda en caché, no hace falta volver a cargarla cada vez.
 3. Busca el canal por nombre o filtra por grupo y selecciónalo.
 4. Para comprobar que es el canal correcto, pulsa **Vista previa** (o doble clic en el canal). Se reproduce dentro de la app, en el panel superior derecho, con control de volumen y silencio. **Abrir en VLC** lo abre en una ventana aparte si prefieres pantalla completa. La app detiene la vista previa sola cuando empieza una grabación, para no ocupar la conexión del proveedor.
@@ -45,10 +45,16 @@ Para añadir otro idioma: copia `Strings\Strings.en.xaml` como `Strings\Strings.
 ## Compilar
 
 ```powershell
-.\build.ps1
+.\build.ps1      # compilación para desarrollo en dist\ (requiere el runtime de .NET 10)
+.\release.ps1    # paquete autocontenido para distribuir en release\*.zip
 ```
 
-Genera `dist\IptvRecorder.exe` junto con la carpeta `dist\libvlc`, que contiene el motor de VLC para la vista previa. Hay que copiar las dos cosas juntas. Requiere el runtime de .NET 10.
+`dist` contiene el ejecutable y la carpeta `libvlc` con el motor de VLC para la vista previa. Hay que copiar las dos cosas juntas.
+
+## Créditos
+
+- [FFmpeg](https://ffmpeg.org) (build de [gyan.dev](https://www.gyan.dev/ffmpeg/builds/)), licencia GPL.
+- [LibVLC](https://www.videolan.org/vlc/libvlc.html) y [LibVLCSharp](https://code.videolan.org/videolan/LibVLCSharp), licencia LGPL.
 
 ## Datos
 

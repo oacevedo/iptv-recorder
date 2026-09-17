@@ -64,6 +64,10 @@ public class RecordingScheduler : IDisposable
     {
         if (!string.IsNullOrWhiteSpace(configured) && File.Exists(configured)) return configured;
 
+        // Un ffmpeg.exe junto al ejecutable (así se distribuye en el zip del release).
+        var bundled = Path.Combine(AppContext.BaseDirectory, "ffmpeg.exe");
+        if (File.Exists(bundled)) return bundled;
+
         // PATH del proceso, y después el PATH del registro por si la app arrancó
         // desde un entorno anterior a una instalación o actualización de ffmpeg.
         var paths = new[]

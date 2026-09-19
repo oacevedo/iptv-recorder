@@ -98,6 +98,7 @@
     <!-- Scheduler -->
     <sys:String x:Key="Log_ClosedDuringRecording">The application was closed during the recording</sys:String>
     <sys:String x:Key="Log_Missed">Start time passed while the app was not running</sys:String>
+    <sys:String x:Key="Log_WakeUnavailable">Warning: Windows will not wake the computer to record. Enable wake timers in the power plan or leave the PC on.</sys:String>
     <sys:String x:Key="Log_FfmpegMissing">ffmpeg not found. Set its path in Settings.</sys:String>
     <sys:String x:Key="Log_OutputFolderError">Could not create the output folder: {0}</sys:String>
     <sys:String x:Key="Log_FfmpegStartError">Could not start ffmpeg: {0}</sys:String>
@@ -129,6 +130,8 @@
     <sys:String x:Key="Set_Convert">Convert to MP4 when finished (no re-encoding, takes a few seconds)</sys:String>
     <sys:String x:Key="Set_Tray">Keep running in the system tray when closed or minimized</sys:String>
     <sys:String x:Key="Set_Autostart">Start with Windows (in the tray)</sys:String>
+    <sys:String x:Key="Set_PreventSleep">Prevent sleep while recording and wake the computer for scheduled recordings</sys:String>
+    <sys:String x:Key="Set_PreventSleep_Tip">The screen can still turn off. Waking the computer requires wake timers to be allowed in the power plan.</sys:String>
     <sys:String x:Key="Btn_Cancel">Cancel</sys:String>
     <sys:String x:Key="Btn_Save">Save</sys:String>
     <sys:String x:Key="Set_Detected">Detected automatically: {0}</sys:String>

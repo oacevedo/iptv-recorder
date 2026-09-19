@@ -98,6 +98,7 @@
     <!-- Planificador -->
     <sys:String x:Key="Log_ClosedDuringRecording">La aplicación se cerró durante la grabación</sys:String>
     <sys:String x:Key="Log_Missed">Se pasó la hora de inicio sin que la app estuviera abierta</sys:String>
+    <sys:String x:Key="Log_WakeUnavailable">Aviso: Windows no permite despertar el equipo para grabar. Activa los temporizadores de reactivación en el plan de energía o deja el PC encendido.</sys:String>
     <sys:String x:Key="Log_FfmpegMissing">No se encontró ffmpeg. Configura la ruta en Ajustes.</sys:String>
     <sys:String x:Key="Log_OutputFolderError">No se pudo crear la carpeta de salida: {0}</sys:String>
     <sys:String x:Key="Log_FfmpegStartError">No se pudo iniciar ffmpeg: {0}</sys:String>
@@ -129,6 +130,8 @@
     <sys:String x:Key="Set_Convert">Convertir a MP4 al terminar (sin recodificar, tarda unos segundos)</sys:String>
     <sys:String x:Key="Set_Tray">Al cerrar o minimizar, seguir en la bandeja del sistema</sys:String>
     <sys:String x:Key="Set_Autostart">Iniciar con Windows (en la bandeja)</sys:String>
+    <sys:String x:Key="Set_PreventSleep">Impedir la suspensión al grabar y despertar el equipo para las grabaciones programadas</sys:String>
+    <sys:String x:Key="Set_PreventSleep_Tip">La pantalla puede apagarse igualmente. Despertar el equipo requiere que el plan de energía permita los temporizadores de reactivación.</sys:String>
     <sys:String x:Key="Btn_Cancel">Cancelar</sys:String>
     <sys:String x:Key="Btn_Save">Guardar</sys:String>
     <sys:String x:Key="Set_Detected">Detectado automáticamente: {0}</sys:String>

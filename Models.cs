@@ -89,6 +89,8 @@ public class AppSettings
     public bool ConvertToMp4 { get; set; } = true;
     public bool MinimizeToTray { get; set; } = true;
     public bool StartWithWindows { get; set; } = false;
+    /// <summary>Impedir la suspensión mientras se graba y despertar el equipo para grabar.</summary>
+    public bool PreventSleep { get; set; } = true;
     /// <summary>Código de idioma ("es", "en"). Vacío = el del sistema.</summary>
     public string Language { get; set; } = "";
 }

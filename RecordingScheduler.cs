@@ -59,6 +59,50 @@ public class RecordingScheduler : IDisposable
             if (now >= r.Start.AddSeconds(-lead))
                 Start(r);
         }
+
+        UpdatePower();
+    }
+
+    /// <summary>Minutos de antelación con los que se despierta el equipo.</summary>
+    private const int WakeMarginMinutes = 2;
+
+    private bool _wakeWarned;
+
+    /// <summary>Mantiene el equipo despierto mientras se graba y arma el despertador para
+    /// la siguiente grabación programada.</summary>
+    private void UpdatePower()
+    {
+        var s = _settings();
+        if (!s.PreventSleep)
+        {
+            PowerManager.Release();
+            return;
+        }
+
+        PowerManager.KeepAwake(_procs.Count > 0);
+
+        var now = DateTime.Now;
+        var next = _recordings
+            .Where(r => r.Status == RecordingStatus.Pending)
+            .Select(r => r.Start.AddSeconds(-s.LeadSeconds))
+            .Where(t => t > now)
+            .DefaultIfEmpty(DateTime.MinValue)
+            .Min();
+
+        if (next == DateTime.MinValue)
+        {
+            PowerManager.CancelWake();
+            return;
+        }
+
+        var wakeAt = next.AddMinutes(-WakeMarginMinutes);
+        if (wakeAt <= now) return;
+
+        if (!PowerManager.ScheduleWake(wakeAt) && !_wakeWarned)
+        {
+            _wakeWarned = true;
+            Log?.Invoke(Loc.Get("Log_WakeUnavailable"));
+        }
     }
 
     public static string? ResolveFfmpeg(string configured)
@@ -219,6 +263,7 @@ public class RecordingScheduler : IDisposable
         r.Status = RecordingStatus.Recording;
         r.LastLog = Loc.Get("Log_Connecting");
         Changed?.Invoke();
+        UpdatePower();
         Log?.Invoke(Loc.Get("Log_Recording", r.ChannelName, tsFile));
 
         _ = Task.Run(() => PumpStderr(r, proc));
@@ -289,6 +334,7 @@ public class RecordingScheduler : IDisposable
             _stopRequested.Remove(r.Id);
             if (_relays.Remove(r.Id, out var relay)) relay.Dispose();
             r.LiveUrl = "";
+            UpdatePower();
 
             if (size < 200_000)
             {
@@ -398,5 +444,6 @@ public class RecordingScheduler : IDisposable
         _procs.Clear();
         foreach (var relay in _relays.Values.ToList()) relay.Dispose();
         _relays.Clear();
+        PowerManager.Release();
     }
 }

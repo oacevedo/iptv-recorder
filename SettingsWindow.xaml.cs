@@ -33,6 +33,7 @@ public partial class SettingsWindow : Window
         ConvertBox.IsChecked = current.ConvertToMp4;
         TrayBox.IsChecked = current.MinimizeToTray;
         AutostartBox.IsChecked = current.StartWithWindows;
+        PreventSleepBox.IsChecked = current.PreventSleep;
 
         // Una ruta guardada que ya no existe (por ejemplo tras actualizar ffmpeg) se vacía
         // para volver a la detección automática en lugar de bloquear el guardado.
@@ -106,6 +107,7 @@ public partial class SettingsWindow : Window
             ConvertToMp4 = ConvertBox.IsChecked == true,
             MinimizeToTray = TrayBox.IsChecked == true,
             StartWithWindows = AutostartBox.IsChecked == true,
+            PreventSleep = PreventSleepBox.IsChecked == true,
             Language = LanguageBox.SelectedValue as string ?? "",
         };
         DialogResult = true;

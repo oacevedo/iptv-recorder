@@ -49,12 +49,13 @@ Para añadir otro idioma: copia `Strings\Strings.en.xaml` como `Strings\Strings.
 - **Empezar antes**: segundos de margen antes de la hora indicada (por defecto 60) para que el stream enganche.
 - **Convertir a MP4**: al terminar, remuxea el `.ts` a `.mp4` sin recodificar y borra el `.ts`.
 - **Iniciar con Windows**: arranca minimizado en la bandeja al iniciar sesión, para no perder grabaciones.
+- **Impedir la suspensión**: bloquea la suspensión mientras se graba y despierta el equipo antes de una grabación programada. Activado por defecto.
 - **User-Agent**: algunos proveedores solo aceptan reproductores conocidos. Por defecto se identifica como VLC.
 
 ## Limitaciones
 
 - Casi todos los proveedores limitan las conexiones simultáneas. Una grabación cuenta como una conexión: no veas **otro** canal del mismo servicio mientras grabas. Ver la propia grabación con "Ver grabación" sí es seguro, porque no abre ninguna conexión adicional.
-- Si el PC está apagado o suspendido a la hora programada, la grabación no se hace. Desactiva la suspensión automática si programas de noche.
+- La app impide que el equipo se suspenda mientras graba y lo despierta para las grabaciones programadas, pero no puede encenderlo si está apagado del todo. Algunos planes de energía tienen desactivados los temporizadores de reactivación; en ese caso la app lo avisa en la barra de estado.
 - Las URLs de la lista cambian a veces. Si una grabación falla con error de conexión, vuelve a cargar la lista y programa de nuevo.
 
 ## Compilar

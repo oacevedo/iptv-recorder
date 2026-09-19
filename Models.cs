@@ -86,6 +86,8 @@ public class AppSettings
         Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), "IPTV");
     public string UserAgent { get; set; } = "VLC/3.0.20 LibVLC/3.0.20";
     public int LeadSeconds { get; set; } = 60;
+    /// <summary>Minutos extra grabados al final, para cubrir descuentos y prórrogas.</summary>
+    public int TailMinutes { get; set; } = 10;
     public bool ConvertToMp4 { get; set; } = true;
     public bool MinimizeToTray { get; set; } = true;
     public bool StartWithWindows { get; set; } = false;

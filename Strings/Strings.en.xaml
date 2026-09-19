@@ -71,6 +71,7 @@
     <sys:String x:Key="Msg_BadDateTime">Enter a valid date and time (for example 20:55).</sys:String>
     <sys:String x:Key="Msg_TimePassed">That time has already passed.</sys:String>
     <sys:String x:Key="Status_Scheduled">Scheduled "{0}" for {1} at {2}</sys:String>
+    <sys:String x:Key="Status_ScheduledTail">Scheduled "{0}" for {1} at {2}. It will record until {3} because of the end margin.</sys:String>
     <sys:String x:Key="Status_Stopping">Stopping recording...</sys:String>
     <sys:String x:Key="Log_CancelledByUser">Cancelled by the user</sys:String>
     <sys:String x:Key="Msg_StopBeforeDelete">Stop the recording before deleting it.</sys:String>
@@ -125,12 +126,15 @@
     <sys:String x:Key="Set_UA_Tip">Some providers only accept well-known players</sys:String>
     <sys:String x:Key="Set_Lead">Start early (seconds):</sys:String>
     <sys:String x:Key="Set_Lead_Tip">Margin so the stream connects before the match starts</sys:String>
+    <sys:String x:Key="Set_Tail">End margin (minutes):</sys:String>
+    <sys:String x:Key="Set_Tail_Tip">Extra minutes recorded after the end time, to cover stoppage time and extra time. 0 disables it.</sys:String>
+    <sys:String x:Key="Msg_TailRange">The end margin must be between 0 and 120 minutes.</sys:String>
     <sys:String x:Key="Set_Language">Language:</sys:String>
     <sys:String x:Key="Lang_Auto">Automatic (system)</sys:String>
     <sys:String x:Key="Set_Convert">Convert to MP4 when finished (no re-encoding, takes a few seconds)</sys:String>
     <sys:String x:Key="Set_Tray">Keep running in the system tray when closed or minimized</sys:String>
     <sys:String x:Key="Set_Autostart">Start with Windows (in the tray)</sys:String>
-    <sys:String x:Key="Set_PreventSleep">Prevent sleep while recording and wake the computer for scheduled recordings</sys:String>
+    <sys:String x:Key="Set_PreventSleep">Prevent sleep and wake the computer to record</sys:String>
     <sys:String x:Key="Set_PreventSleep_Tip">The screen can still turn off. Waking the computer requires wake timers to be allowed in the power plan.</sys:String>
     <sys:String x:Key="Btn_Cancel">Cancel</sys:String>
     <sys:String x:Key="Btn_Save">Save</sys:String>

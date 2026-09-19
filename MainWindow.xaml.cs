@@ -394,7 +394,10 @@ public partial class MainWindow : Window
         if (r == null) return;
         InsertSorted(r);
         Store.SaveRecordings(_recordings);
-        SetStatus(Loc.Get("Status_Scheduled", r.Title, r.Start.ToString("d"), r.Start.ToString("HH:mm")));
+        var stopAt = RecordingScheduler.EndWithTail(r, _settings);
+        SetStatus(stopAt > r.End
+            ? Loc.Get("Status_ScheduledTail", r.Title, r.Start.ToString("d"), r.Start.ToString("HH:mm"), stopAt.ToString("HH:mm"))
+            : Loc.Get("Status_Scheduled", r.Title, r.Start.ToString("d"), r.Start.ToString("HH:mm")));
         TitleBox.Clear();
         _scheduler.Tick();
     }

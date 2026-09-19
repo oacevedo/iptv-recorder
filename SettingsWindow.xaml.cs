@@ -30,6 +30,7 @@ public partial class SettingsWindow : Window
         OutputBox.Text = current.OutputFolder;
         UserAgentBox.Text = current.UserAgent;
         LeadBox.Text = current.LeadSeconds.ToString();
+        TailBox.Text = current.TailMinutes.ToString();
         ConvertBox.IsChecked = current.ConvertToMp4;
         TrayBox.IsChecked = current.MinimizeToTray;
         AutostartBox.IsChecked = current.StartWithWindows;
@@ -96,6 +97,12 @@ public partial class SettingsWindow : Window
 
         if (!int.TryParse(LeadBox.Text.Trim(), out var lead) || lead < 0 || lead > 600) { Warn("Msg_LeadRange"); return; }
 
+        if (!int.TryParse(TailBox.Text.Trim(), out var tail) || tail < 0 || tail > RecordingScheduler.MaxTailMinutes)
+        {
+            Warn("Msg_TailRange");
+            return;
+        }
+
         Result = new AppSettings
         {
             M3uUrl = Result.M3uUrl,
@@ -104,6 +111,7 @@ public partial class SettingsWindow : Window
             OutputFolder = output,
             UserAgent = UserAgentBox.Text.Trim().Length > 0 ? UserAgentBox.Text.Trim() : new AppSettings().UserAgent,
             LeadSeconds = lead,
+            TailMinutes = tail,
             ConvertToMp4 = ConvertBox.IsChecked == true,
             MinimizeToTray = TrayBox.IsChecked == true,
             StartWithWindows = AutostartBox.IsChecked == true,

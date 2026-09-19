@@ -155,6 +155,12 @@ public class RecordingScheduler : IDisposable
         return null;
     }
 
+    /// <summary>Hora a la que se detiene realmente la grabación, con el margen final.</summary>
+    public static DateTime EndWithTail(Recording r, AppSettings s)
+        => r.End.AddMinutes(Math.Clamp(s.TailMinutes, 0, MaxTailMinutes));
+
+    public const int MaxTailMinutes = 120;
+
     private static string SafeFileName(string name)
     {
         var invalid = Path.GetInvalidFileNameChars();
@@ -192,7 +198,8 @@ public class RecordingScheduler : IDisposable
         var i = 1;
         while (File.Exists(tsFile)) tsFile = Path.Combine(s.OutputFolder, $"{baseName} ({i++}).ts");
 
-        var seconds = Math.Max(30, (int)(r.End - DateTime.Now).TotalSeconds);
+        // Se graba más allá de la hora de fin indicada: los partidos se alargan.
+        var seconds = Math.Max(30, (int)(EndWithTail(r, s) - DateTime.Now).TotalSeconds);
 
         var psi = new ProcessStartInfo
         {

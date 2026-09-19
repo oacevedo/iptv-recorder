@@ -71,6 +71,7 @@
     <sys:String x:Key="Msg_BadDateTime">Indica fecha y hora válidas (por ejemplo 20:55).</sys:String>
     <sys:String x:Key="Msg_TimePassed">Esa hora ya ha pasado.</sys:String>
     <sys:String x:Key="Status_Scheduled">Programada "{0}" para el {1} a las {2}</sys:String>
+    <sys:String x:Key="Status_ScheduledTail">Programada "{0}" para el {1} a las {2}. Se grabará hasta las {3} por el margen final.</sys:String>
     <sys:String x:Key="Status_Stopping">Deteniendo grabación...</sys:String>
     <sys:String x:Key="Log_CancelledByUser">Cancelada por el usuario</sys:String>
     <sys:String x:Key="Msg_StopBeforeDelete">Detén la grabación antes de eliminarla.</sys:String>
@@ -125,12 +126,15 @@
     <sys:String x:Key="Set_UA_Tip">Algunos proveedores solo aceptan reproductores conocidos</sys:String>
     <sys:String x:Key="Set_Lead">Empezar antes (segundos):</sys:String>
     <sys:String x:Key="Set_Lead_Tip">Margen para que el stream enganche antes de que empiece el partido</sys:String>
+    <sys:String x:Key="Set_Tail">Margen al final (minutos):</sys:String>
+    <sys:String x:Key="Set_Tail_Tip">Minutos extra que se graban después de la hora de fin, para cubrir descuentos y prórrogas. 0 para desactivarlo.</sys:String>
+    <sys:String x:Key="Msg_TailRange">El margen final debe estar entre 0 y 120 minutos.</sys:String>
     <sys:String x:Key="Set_Language">Idioma:</sys:String>
     <sys:String x:Key="Lang_Auto">Automático (sistema)</sys:String>
     <sys:String x:Key="Set_Convert">Convertir a MP4 al terminar (sin recodificar, tarda unos segundos)</sys:String>
     <sys:String x:Key="Set_Tray">Al cerrar o minimizar, seguir en la bandeja del sistema</sys:String>
     <sys:String x:Key="Set_Autostart">Iniciar con Windows (en la bandeja)</sys:String>
-    <sys:String x:Key="Set_PreventSleep">Impedir la suspensión al grabar y despertar el equipo para las grabaciones programadas</sys:String>
+    <sys:String x:Key="Set_PreventSleep">Impedir la suspensión y despertar el equipo para grabar</sys:String>
     <sys:String x:Key="Set_PreventSleep_Tip">La pantalla puede apagarse igualmente. Despertar el equipo requiere que el plan de energía permita los temporizadores de reactivación.</sys:String>
     <sys:String x:Key="Btn_Cancel">Cancelar</sys:String>
     <sys:String x:Key="Btn_Save">Guardar</sys:String>

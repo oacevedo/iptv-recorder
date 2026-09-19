@@ -63,8 +63,11 @@
         <TextBox x:Name="UserAgentBox" Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" ToolTip="{DynamicResource Set_UA_Tip}"/>
 
         <TextBlock Grid.Row="5" Text="{DynamicResource Set_Lead}"/>
-        <TextBox x:Name="LeadBox" Grid.Row="5" Grid.Column="1" Width="80" HorizontalAlignment="Left" TextAlignment="Center"
-                 ToolTip="{DynamicResource Set_Lead_Tip}"/>
+        <StackPanel Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <TextBox x:Name="LeadBox" Width="80" TextAlignment="Center" ToolTip="{DynamicResource Set_Lead_Tip}"/>
+            <TextBlock Text="{DynamicResource Set_Tail}" Margin="20,0,10,0"/>
+            <TextBox x:Name="TailBox" Width="80" TextAlignment="Center" ToolTip="{DynamicResource Set_Tail_Tip}"/>
+        </StackPanel>
 
         <CheckBox x:Name="ConvertBox" Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Content="{DynamicResource Set_Convert}"/>
         <CheckBox x:Name="TrayBox" Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Content="{DynamicResource Set_Tray}"/>

@@ -29,7 +29,7 @@ Si compilas desde el código fuente, necesitas el [SDK de .NET 10](https://dotne
 2. Pega el enlace M3U arriba y pulsa **Cargar lista**. La lista queda en caché, no hace falta volver a cargarla cada vez.
 3. Busca el canal por nombre o filtra por grupo y selecciónalo.
 4. Para comprobar que es el canal correcto, pulsa **Vista previa** (o doble clic en el canal). Se reproduce dentro de la app, en el panel superior derecho, con control de volumen y silencio. **Abrir en VLC** lo abre en una ventana aparte si prefieres pantalla completa. La app detiene la vista previa sola cuando empieza una grabación, para no ocupar la conexión del proveedor.
-5. Rellena título, fecha, hora (formato 24h, por ejemplo `20:55`) y duración en minutos.
+5. Rellena título, fecha, hora (formato 24h, por ejemplo `20:55`) y duración en minutos. Pon la duración del partido: la app añade sola el margen del final.
 6. Pulsa **Programar**. O **Grabar ahora** para empezar al instante.
 
 La app debe seguir abierta a la hora de la grabación. Al cerrarla o minimizarla se queda en la bandeja del sistema y las grabaciones se hacen igualmente. Para cerrarla del todo: clic derecho en el icono de la bandeja y **Salir**.
@@ -47,6 +47,7 @@ Para añadir otro idioma: copia `Strings\Strings.en.xaml` como `Strings\Strings.
 - **Carpeta de salida**: por defecto `Vídeos\IPTV`.
 - **Reproductor**: el que se usa para "Abrir en VLC". Vacío significa VLC si está instalado, y si no, ffplay. La vista previa incrustada no depende de esto: usa LibVLC, que va incluido con la app.
 - **Empezar antes**: segundos de margen antes de la hora indicada (por defecto 60) para que el stream enganche.
+- **Margen al final**: minutos que se graban después de la hora de fin (por defecto 10), para que los descuentos y las prórrogas no corten el partido. Pon 0 para desactivarlo.
 - **Convertir a MP4**: al terminar, remuxea el `.ts` a `.mp4` sin recodificar y borra el `.ts`.
 - **Iniciar con Windows**: arranca minimizado en la bandeja al iniciar sesión, para no perder grabaciones.
 - **Impedir la suspensión**: bloquea la suspensión mientras se graba y despierta el equipo antes de una grabación programada. Activado por defecto.

@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Markup;
 
 namespace IptvRecorder;
 
@@ -18,7 +19,15 @@ public static class Loc
     private const string Fallback = "en";
     private static ResourceDictionary? _current;
 
+    /// <summary>Cultura con la que arrancó Windows, antes de que la app la cambie.</summary>
+    private static readonly CultureInfo SystemCulture = CultureInfo.CurrentCulture;
+
     public static string Current { get; private set; } = Fallback;
+
+    /// <summary>Idioma que deben usar las ventanas para dar formato a fechas y números.
+    /// WPF no mira la cultura del hilo: va por <see cref="FrameworkElement.Language"/>.</summary>
+    public static XmlLanguage WindowLanguage { get; private set; } =
+        XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag);
 
     public static string Resolve(string code)
     {
@@ -39,6 +48,29 @@ public static class Loc
         merged.Add(dict);
         _current = dict;
         Current = code;
+        ApplyCulture(code);
+    }
+
+    /// <summary>Alinea el formato de fechas y números con el idioma elegido, para que en
+    /// español no salgan fechas al estilo estadounidense. Si el idioma coincide con el de
+    /// Windows se conserva la cultura del sistema, que lleva las preferencias del usuario.</summary>
+    private static void ApplyCulture(string code)
+    {
+        CultureInfo culture;
+        try
+        {
+            culture = SystemCulture.TwoLetterISOLanguageName.Equals(code, StringComparison.OrdinalIgnoreCase)
+                ? SystemCulture
+                : CultureInfo.CreateSpecificCulture(code);
+        }
+        catch { culture = SystemCulture; }
+
+        CultureInfo.DefaultThreadCurrentCulture = culture;
+        CultureInfo.CurrentCulture = culture;
+        Thread.CurrentThread.CurrentCulture = culture;
+
+        WindowLanguage = XmlLanguage.GetLanguage(culture.IetfLanguageTag);
+        foreach (Window window in Application.Current.Windows) window.Language = WindowLanguage;
     }
 
     public static string Get(string key, params object[] args)

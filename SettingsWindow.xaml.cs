@@ -18,6 +18,7 @@ public partial class SettingsWindow : Window
     public SettingsWindow(AppSettings current)
     {
         InitializeComponent();
+        Language = Loc.WindowLanguage;
         Result = current;
 
         var languages = new List<LanguageOption> { new("", Loc.Get("Lang_Auto")) };

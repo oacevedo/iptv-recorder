@@ -39,6 +39,7 @@ public partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        Language = Loc.WindowLanguage;
 
         _settings = Store.LoadSettings();
         _favorites = Store.LoadFavorites();
@@ -546,6 +547,11 @@ public partial class MainWindow : Window
     private void ApplyLanguage(string code)
     {
         Loc.Apply(code);
+        Language = Loc.WindowLanguage;
+        // El selector de fecha guarda su texto ya formateado, así que hay que reponerlo.
+        var date = DateBox.SelectedDate;
+        DateBox.SelectedDate = null;
+        DateBox.SelectedDate = date;
         UpdateSelectedChannelText();
         if (!(_preview?.IsPlaying ?? false)) PreviewChannelText.Text = Loc.Get("Preview_None");
         if (_channels.Count > 0)

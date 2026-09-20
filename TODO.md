@@ -47,12 +47,13 @@ Lista de mejoras por orden de prioridad.
   `favorites.json` por el `tvg-id` del canal, que sobrevive a que el proveedor lo
   renombre; si la lista no trae identificador se usa el nombre.
 
-## Siguientes
+- [x] **7. Formato de fecha según el idioma**
+  `Loc.ApplyCulture` fija la cultura del hilo y, sobre todo, el `Language` de cada
+  ventana: WPF no usa la cultura del hilo para dar formato, va por esa propiedad. Si el
+  idioma elegido coincide con el de Windows se conserva la cultura del sistema, para no
+  perder las preferencias regionales del usuario.
 
-- [ ] **7. Formato de fecha según el idioma**
-  Con la interfaz en español las fechas salen en formato estadounidense, porque el
-  idioma de la app no cambia la cultura de formato. Hay que fijarla en `Loc.Apply`
-  comprobando que no rompe el selector de fecha ni la lectura de la hora.
+## Siguientes
 
 - [ ] **8. Registro en archivo**
   Hoy un fallo solo deja una línea en la columna Detalle. Un log en disco permite

@@ -38,7 +38,7 @@ La app debe seguir abierta a la hora de la grabación. Al cerrarla o minimizarla
 
 ## Idioma
 
-La interfaz está en español e inglés. Por defecto usa el idioma de Windows; se puede fijar en Ajustes y cambia al instante sin reiniciar.
+La interfaz está en español e inglés. Por defecto usa el idioma de Windows; se puede fijar en Ajustes y cambia al instante sin reiniciar. Las fechas siguen al idioma elegido, salvo que coincida con el de Windows, en cuyo caso se respetan las preferencias regionales del sistema.
 
 Para añadir otro idioma: copia `Strings\Strings.en.xaml` como `Strings\Strings.xx.xaml` (código ISO de dos letras), traduce los textos y añade el idioma a la lista `Available` en `Localization.cs`.
 

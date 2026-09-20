@@ -136,6 +136,10 @@
     <sys:String x:Key="Set_Autostart">Iniciar con Windows (en la bandeja)</sys:String>
     <sys:String x:Key="Set_PreventSleep">Impedir la suspensión y despertar el equipo para grabar</sys:String>
     <sys:String x:Key="Set_PreventSleep_Tip">La pantalla puede apagarse igualmente. Despertar el equipo requiere que el plan de energía permita los temporizadores de reactivación.</sys:String>
+    <sys:String x:Key="Set_Notify">Avisar cuando una grabación termina o falla</sys:String>
+    <sys:String x:Key="Set_Notify_Tip">Muestra un aviso junto al reloj. Al pulsarlo se abre la carpeta con el archivo.</sys:String>
+    <sys:String x:Key="Notify_Done">Grabación terminada</sys:String>
+    <sys:String x:Key="Notify_Failed">Grabación fallida</sys:String>
     <sys:String x:Key="Btn_Cancel">Cancelar</sys:String>
     <sys:String x:Key="Btn_Save">Guardar</sys:String>
     <sys:String x:Key="Set_Detected">Detectado automáticamente: {0}</sys:String>

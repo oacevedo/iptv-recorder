@@ -90,6 +90,8 @@ public class AppSettings
     public int TailMinutes { get; set; } = 10;
     public bool ConvertToMp4 { get; set; } = true;
     public bool MinimizeToTray { get; set; } = true;
+    /// <summary>Avisar en la bandeja cuando una grabación termina o falla.</summary>
+    public bool Notifications { get; set; } = true;
     public bool StartWithWindows { get; set; } = false;
     /// <summary>Impedir la suspensión mientras se graba y despertar el equipo para grabar.</summary>
     public bool PreventSleep { get; set; } = true;

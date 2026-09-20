@@ -19,6 +19,8 @@ public class RecordingScheduler : IDisposable
     public event Action<string>? Log;
     public event Action? Changed;
     public event Action<Recording>? Starting;
+    /// <summary>Una grabación ha terminado, bien o mal. No se lanza si el usuario la detuvo.</summary>
+    public event Action<Recording>? Finished;
 
     public bool AnyActive => _procs.Count > 0;
 
@@ -53,6 +55,7 @@ public class RecordingScheduler : IDisposable
                 r.Status = RecordingStatus.Failed;
                 r.LastLog = Loc.Get("Log_Missed");
                 Changed?.Invoke();
+                Finished?.Invoke(r);
                 continue;
             }
 
@@ -181,6 +184,7 @@ public class RecordingScheduler : IDisposable
             r.Status = RecordingStatus.Failed;
             r.LastLog = Loc.Get("Log_FfmpegMissing");
             Changed?.Invoke();
+            Finished?.Invoke(r);
             return;
         }
 
@@ -190,6 +194,7 @@ public class RecordingScheduler : IDisposable
             r.Status = RecordingStatus.Failed;
             r.LastLog = Loc.Get("Log_OutputFolderError", ex.Message);
             Changed?.Invoke();
+            Finished?.Invoke(r);
             return;
         }
 
@@ -257,6 +262,7 @@ public class RecordingScheduler : IDisposable
             r.Status = RecordingStatus.Failed;
             r.LastLog = Loc.Get("Log_FfmpegStartError", ex.Message);
             Changed?.Invoke();
+            Finished?.Invoke(r);
             return;
         }
 
@@ -350,6 +356,7 @@ public class RecordingScheduler : IDisposable
                 try { if (size == 0 && File.Exists(tsFile)) File.Delete(tsFile); } catch { }
                 Changed?.Invoke();
                 Log?.Invoke(Loc.Get("Log_Failed", r.ChannelName, r.LastLog));
+                if (!requested) Finished?.Invoke(r);
                 return;
             }
 
@@ -421,6 +428,7 @@ public class RecordingScheduler : IDisposable
         r.LastLog = note ?? Loc.Get(requested ? "Log_StoppedManually" : "Log_Completed", mb);
         Changed?.Invoke();
         Log?.Invoke(Loc.Get("Log_Finished", r.ChannelName, file));
+        Finished?.Invoke(r);
     }
 
     public void Stop(Recording r)

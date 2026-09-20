@@ -136,6 +136,10 @@
     <sys:String x:Key="Set_Autostart">Start with Windows (in the tray)</sys:String>
     <sys:String x:Key="Set_PreventSleep">Prevent sleep and wake the computer to record</sys:String>
     <sys:String x:Key="Set_PreventSleep_Tip">The screen can still turn off. Waking the computer requires wake timers to be allowed in the power plan.</sys:String>
+    <sys:String x:Key="Set_Notify">Notify when a recording finishes or fails</sys:String>
+    <sys:String x:Key="Set_Notify_Tip">Shows a notification next to the clock. Clicking it opens the folder with the file.</sys:String>
+    <sys:String x:Key="Notify_Done">Recording finished</sys:String>
+    <sys:String x:Key="Notify_Failed">Recording failed</sys:String>
     <sys:String x:Key="Btn_Cancel">Cancel</sys:String>
     <sys:String x:Key="Btn_Save">Save</sys:String>
     <sys:String x:Key="Set_Detected">Detected automatically: {0}</sys:String>

@@ -17,11 +17,13 @@ Lista de mejoras por orden de prioridad.
   sigue siendo la del partido. Al programar, la barra de estado dice hasta qué hora se
   grabará de verdad. Ver `RecordingScheduler.EndWithTail`.
 
-## Siguientes
+- [x] **3. Aviso al terminar o al fallar**
+  El planificador lanza un evento `Finished` al llegar a un estado final y la ventana
+  principal muestra una notificación junto al reloj. No avisa cuando la detiene el
+  usuario. Al pulsar el aviso se abre la carpeta con el archivo seleccionado. Se puede
+  desactivar en Ajustes.
 
-- [ ] **3. Aviso al terminar o al fallar**
-  Notificación en la bandeja cuando una grabación acaba bien o falla, para no
-  descubrirlo al día siguiente.
+## Siguientes
 
 - [ ] **4. Comprobar el espacio en disco**
   Dos horas en alta definición ocupan unos 5 GB. Avisar antes de empezar si no cabe.

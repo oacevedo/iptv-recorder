@@ -25,6 +25,7 @@ public partial class MainWindow : Window
     private WinForms.NotifyIcon? _tray;
     private WinForms.ToolStripMenuItem? _trayOpen;
     private WinForms.ToolStripMenuItem? _trayExit;
+    private Recording? _lastNotified;
     private bool _exiting;
 
     /// <summary>Entrada "todos los grupos" del desplegable. Es un objeto propio para no confundirla con un grupo real.</summary>
@@ -55,6 +56,8 @@ public partial class MainWindow : Window
             if (sameChannel) ScheduleLiveSwitch(r);
             else if (wasOpen) SetStatus(Loc.Get("Status_PreviewClosedForRecording", r.Title));
         };
+
+        _scheduler.Finished += NotifyFinished;
 
         _preview = new EmbeddedPreview(VideoView, _settings.UserAgent);
         _preview.Error += msg => Dispatcher.BeginInvoke(() =>
@@ -547,6 +550,38 @@ public partial class MainWindow : Window
         menu.Items.Add(_trayExit);
         _tray.ContextMenuStrip = menu;
         _tray.DoubleClick += (_, _) => ShowFromTray();
+        _tray.BalloonTipClicked += (_, _) => OpenNotified();
+    }
+
+    /// <summary>Aviso en la bandeja al acabar una grabación, para no descubrir un fallo
+    /// al día siguiente. Al pulsar el aviso se abre la carpeta con el archivo.</summary>
+    private void NotifyFinished(Recording r)
+    {
+        if (!_settings.Notifications || _tray == null) return;
+
+        _lastNotified = r;
+        var ok = r.Status == RecordingStatus.Completed;
+        _tray.ShowBalloonTip(
+            8000,
+            Loc.Get(ok ? "Notify_Done" : "Notify_Failed"),
+            $"{r.Title}\n{r.LastLog}",
+            ok ? WinForms.ToolTipIcon.Info : WinForms.ToolTipIcon.Error);
+    }
+
+    private void OpenNotified()
+    {
+        var r = _lastNotified;
+        if (r != null && r.Status == RecordingStatus.Completed && r.OutputFile.Length > 0 && File.Exists(r.OutputFile))
+        {
+            try
+            {
+                Process.Start("explorer.exe", $"/select,\"{r.OutputFile}\"");
+                return;
+            }
+            catch { }
+        }
+        ShowFromTray();
+        if (r != null) RecordingsGrid.SelectedItem = r;
     }
 
     private void HideToTray()

@@ -12,6 +12,7 @@ Grabador de canales IPTV para Windows. Carga una lista M3U, busca el canal y pro
 - **Nueva grabación**: título, fecha, hora y duración. "Programar" la deja en cola; "Grabar ahora" empieza al momento.
 - **Grabaciones**: estado en vivo de cada una. En la captura hay una completada, una en curso con tiempo y tamaño, y una pendiente para el día siguiente.
 - **Bandeja del sistema**: al cerrar o minimizar la app sigue funcionando y las grabaciones programadas se hacen igualmente.
+- **Avisos**: cuando una grabación termina o falla aparece una notificación junto al reloj. Al pulsarla se abre la carpeta con el archivo.
 
 ![Ajustes](docs/screenshot-settings.png)
 
@@ -51,6 +52,7 @@ Para añadir otro idioma: copia `Strings\Strings.en.xaml` como `Strings\Strings.
 - **Convertir a MP4**: al terminar, remuxea el `.ts` a `.mp4` sin recodificar y borra el `.ts`.
 - **Iniciar con Windows**: arranca minimizado en la bandeja al iniciar sesión, para no perder grabaciones.
 - **Impedir la suspensión**: bloquea la suspensión mientras se graba y despierta el equipo antes de una grabación programada. Activado por defecto.
+- **Avisar al terminar o fallar**: notificación junto al reloj. Activado por defecto. No avisa si eres tú quien detiene la grabación.
 - **User-Agent**: algunos proveedores solo aceptan reproductores conocidos. Por defecto se identifica como VLC.
 
 ## Limitaciones

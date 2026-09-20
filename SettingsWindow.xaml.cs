@@ -35,6 +35,7 @@ public partial class SettingsWindow : Window
         TrayBox.IsChecked = current.MinimizeToTray;
         AutostartBox.IsChecked = current.StartWithWindows;
         PreventSleepBox.IsChecked = current.PreventSleep;
+        NotifyBox.IsChecked = current.Notifications;
 
         // Una ruta guardada que ya no existe (por ejemplo tras actualizar ffmpeg) se vacía
         // para volver a la detección automática en lugar de bloquear el guardado.
@@ -116,6 +117,7 @@ public partial class SettingsWindow : Window
             MinimizeToTray = TrayBox.IsChecked == true,
             StartWithWindows = AutostartBox.IsChecked == true,
             PreventSleep = PreventSleepBox.IsChecked == true,
+            Notifications = NotifyBox.IsChecked == true,
             Language = LanguageBox.SelectedValue as string ?? "",
         };
         DialogResult = true;

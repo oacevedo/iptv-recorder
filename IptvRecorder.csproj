@@ -11,7 +11,7 @@
     <RootNamespace>IptvRecorder</RootNamespace>
     <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
     <InvariantGlobalization>false</InvariantGlobalization>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <ApplicationIcon>app.ico</ApplicationIcon>
     <!-- Solo las librerías nativas de LibVLC para 64 bits -->
     <VlcWindowsX86Enabled>false</VlcWindowsX86Enabled>

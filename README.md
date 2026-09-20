@@ -78,4 +78,4 @@ Para añadir otro idioma: copia `Strings\Strings.en.xaml` como `Strings\Strings.
 
 ## Datos
 
-Ajustes, grabaciones programadas, caché de la lista y logotipos descargados se guardan en `%APPDATA%\IptvRecorder`. Se puede borrar esa carpeta sin miedo: la app la vuelve a crear.
+Ajustes, grabaciones programadas, favoritos, caché de la lista, logotipos descargados y el registro (`iptv-recorder.log`) se guardan en `%APPDATA%\IptvRecorder`. El botón **Carpeta de datos** en Ajustes la abre con el registro seleccionado, que es lo que hay que mirar cuando una grabación falla de madrugada. Se puede borrar esa carpeta sin miedo: la app la vuelve a crear.

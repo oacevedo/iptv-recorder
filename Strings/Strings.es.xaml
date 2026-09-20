@@ -147,6 +147,8 @@
     <sys:String x:Key="Set_Notify_Tip">Muestra un aviso junto al reloj. Al pulsarlo se abre la carpeta con el archivo.</sys:String>
     <sys:String x:Key="Notify_Done">Grabación terminada</sys:String>
     <sys:String x:Key="Notify_Failed">Grabación fallida</sys:String>
+    <sys:String x:Key="Btn_DataFolder">Carpeta de datos</sys:String>
+    <sys:String x:Key="Btn_DataFolder_Tip">Abre la carpeta con el registro, los ajustes y los favoritos</sys:String>
     <sys:String x:Key="Btn_Cancel">Cancelar</sys:String>
     <sys:String x:Key="Btn_Save">Guardar</sys:String>
     <sys:String x:Key="Set_Detected">Detectado automáticamente: {0}</sys:String>

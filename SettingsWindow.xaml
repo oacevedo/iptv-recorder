@@ -83,10 +83,15 @@
         <CheckBox x:Name="NotifyBox" Grid.Row="10" Grid.Column="1" Grid.ColumnSpan="2"
                   Content="{DynamicResource Set_Notify}" ToolTip="{DynamicResource Set_Notify_Tip}"/>
 
-        <StackPanel Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="3" Orientation="Horizontal" HorizontalAlignment="Right">
-            <Button Content="{DynamicResource Btn_Cancel}" IsCancel="True" local:Icon.Glyph="&#xE711;"/>
-            <Button Content="{DynamicResource Btn_Save}" IsDefault="True" Click="Save_Click" FontWeight="Bold"
-                    local:Icon.Glyph="&#xE74E;"/>
-        </StackPanel>
+        <Grid Grid.Row="12" Grid.Column="0" Grid.ColumnSpan="3">
+            <Button HorizontalAlignment="Left" Margin="0,4" Content="{DynamicResource Btn_DataFolder}"
+                    Click="OpenDataFolder_Click" ToolTip="{DynamicResource Btn_DataFolder_Tip}"
+                    local:Icon.Glyph="&#xEC50;"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button Content="{DynamicResource Btn_Cancel}" IsCancel="True" local:Icon.Glyph="&#xE711;"/>
+                <Button Content="{DynamicResource Btn_Save}" IsDefault="True" Click="Save_Click" FontWeight="Bold"
+                        local:Icon.Glyph="&#xE74E;"/>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

@@ -80,6 +80,10 @@ public partial class MainWindow : Window
         var cached = Store.LoadChannelsCache();
         if (cached != null) ApplyChannels(M3uParser.Parse(cached), fromCache: true);
 
+        AppLog.Write($"--- Inicio. ffmpeg: {RecordingScheduler.ResolveFfmpeg(_settings.FfmpegPath) ?? "no encontrado"}"
+                     + $" | salida: {_settings.OutputFolder}"
+                     + $" | grabaciones pendientes: {_recordings.Count(r => r.Status == RecordingStatus.Pending)}");
+
         if (RecordingScheduler.ResolveFfmpeg(_settings.FfmpegPath) == null)
             SetStatus(Loc.Get("Status_FfmpegMissing"));
 
@@ -578,6 +582,7 @@ public partial class MainWindow : Window
     private void SetStatus(string msg)
     {
         StatusText.Text = $"{DateTime.Now:HH:mm:ss}  {msg}";
+        AppLog.Write(msg);
     }
 
     // ---------- Bandeja del sistema ----------
@@ -607,6 +612,10 @@ public partial class MainWindow : Window
     /// al día siguiente. Al pulsar el aviso se abre la carpeta con el archivo.</summary>
     private void NotifyFinished(Recording r)
     {
+        AppLog.Write($"{r.Status.ToString().ToUpperInvariant()}: \"{r.Title}\" | canal: {r.ChannelName}"
+                     + $" | inicio: {r.Start:yyyy-MM-dd HH:mm} | {r.DurationMinutes} min"
+                     + $" | archivo: {(r.OutputFile.Length > 0 ? r.OutputFile : "-")} | {r.LastLog}");
+
         if (!_settings.Notifications || _tray == null) return;
 
         _lastNotified = r;
@@ -684,6 +693,7 @@ public partial class MainWindow : Window
 
     private void Shutdown()
     {
+        AppLog.Write("--- Salida");
         _exiting = true;
         _external.Stop();
         _preview?.Dispose();

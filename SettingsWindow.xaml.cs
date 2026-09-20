@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
 using Microsoft.Win32;
@@ -83,6 +84,24 @@ public partial class SettingsWindow : Window
             SelectedPath = Directory.Exists(OutputBox.Text) ? OutputBox.Text : "",
         };
         if (dlg.ShowDialog() == WinForms.DialogResult.OK) OutputBox.Text = dlg.SelectedPath;
+    }
+
+    /// <summary>Abre la carpeta de datos con el registro seleccionado, que es lo que se
+    /// busca cuando una grabación ha fallado.</summary>
+    private void OpenDataFolder_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            Directory.CreateDirectory(Store.Dir);
+            if (File.Exists(AppLog.FilePath))
+                Process.Start("explorer.exe", $"/select,\"{AppLog.FilePath}\"");
+            else
+                Process.Start(new ProcessStartInfo(Store.Dir) { UseShellExecute = true });
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(this, ex.Message, Loc.Get("Settings_Title"), MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
     }
 
     private void Save_Click(object sender, RoutedEventArgs e)

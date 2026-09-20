@@ -53,11 +53,12 @@ Lista de mejoras por orden de prioridad.
   idioma elegido coincide con el de Windows se conserva la cultura del sistema, para no
   perder las preferencias regionales del usuario.
 
-## Siguientes
-
-- [ ] **8. Registro en archivo**
-  Hoy un fallo solo deja una línea en la columna Detalle. Un log en disco permite
-  saber qué pasó en una grabación de madrugada.
+- [x] **8. Registro en archivo**
+  `AppLog.cs` escribe en `%APPDATA%\IptvRecorder\iptv-recorder.log` todo lo que pasa por
+  la barra de estado, más el arranque (con la ruta de ffmpeg que se resolvió), la salida
+  y una línea estructurada por cada grabación terminada o fallida. Rota al llegar a 1 MB
+  conservando el archivo anterior. En Ajustes hay un botón que abre la carpeta de datos
+  con el registro ya seleccionado.
 
 ## Proyecto grande
 

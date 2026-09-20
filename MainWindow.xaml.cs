@@ -20,6 +20,7 @@ public partial class MainWindow : Window
     private readonly PreviewPlayer _external = new();
     private EmbeddedPreview? _preview;
     private List<Channel> _channels = new();
+    private HashSet<string> _favorites = new(StringComparer.OrdinalIgnoreCase);
     private Channel? _selected;
     private string _previewUrl = "";
     private WinForms.NotifyIcon? _tray;
@@ -40,6 +41,7 @@ public partial class MainWindow : Window
         InitializeComponent();
 
         _settings = Store.LoadSettings();
+        _favorites = Store.LoadFavorites();
         _recordings = new ObservableCollection<Recording>(Store.LoadRecordings().OrderBy(r => r.Start));
         _scheduler = new RecordingScheduler(_recordings, () => _settings);
         _scheduler.Log += msg => SetStatus(msg);
@@ -142,6 +144,7 @@ public partial class MainWindow : Window
     private void ApplyChannels(List<Channel> channels, bool fromCache)
     {
         _channels = channels;
+        foreach (var c in _channels) c.IsFavorite = _favorites.Contains(c.Key);
         RebuildGroupFilter();
 
         var view = CollectionViewSource.GetDefaultView(_channels);
@@ -166,6 +169,7 @@ public partial class MainWindow : Window
     private bool FilterChannel(object obj)
     {
         if (obj is not Channel c) return false;
+        if (FavFilter.IsChecked == true && !c.IsFavorite) return false;
         if (GroupFilter.SelectedItem is string group && c.Group != group) return false;
 
         var q = SearchBox.Text.Trim();
@@ -179,6 +183,21 @@ public partial class MainWindow : Window
     {
         if (ChannelList.ItemsSource == null) return;
         CollectionViewSource.GetDefaultView(ChannelList.ItemsSource).Refresh();
+    }
+
+    /// <summary>Marca o desmarca un canal como favorito. Se recuerda por el identificador
+    /// de la lista, así que sobrevive a que el proveedor renombre el canal.</summary>
+    private void Favorite_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not FrameworkElement { DataContext: Channel channel }) return;
+
+        channel.IsFavorite = !channel.IsFavorite;
+        if (channel.IsFavorite) _favorites.Add(channel.Key);
+        else _favorites.Remove(channel.Key);
+        Store.SaveFavorites(_favorites);
+
+        // Al quitar un favorito mientras se filtra por favoritos, la fila debe irse.
+        if (FavFilter.IsChecked == true) Filter_Changed(sender, e);
     }
 
     /// <summary>Cada fila pide su logotipo al hacerse visible, de modo que con miles de

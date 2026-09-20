@@ -12,6 +12,19 @@ public class Channel : INotifyPropertyChanged
     public string Group { get; set; } = "";
     public string Logo { get; set; } = "";
     public string Url { get; set; } = "";
+    /// <summary>Identificador del canal en la lista (tvg-id), si lo trae.</summary>
+    public string TvgId { get; set; } = "";
+
+    /// <summary>Clave con la que se recuerdan los favoritos. Se prefiere el identificador
+    /// de la lista porque sobrevive a los cambios de nombre del proveedor.</summary>
+    public string Key => TvgId.Length > 0 ? TvgId : Name;
+
+    private bool _isFavorite;
+    public bool IsFavorite
+    {
+        get => _isFavorite;
+        set { _isFavorite = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsFavorite))); }
+    }
 
     private ImageSource? _logoImage;
     /// <summary>Logotipo ya descargado, o null mientras no lo esté.</summary>

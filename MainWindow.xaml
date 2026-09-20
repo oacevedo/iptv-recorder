@@ -24,6 +24,38 @@
             <Setter Property="Padding" Value="4,3"/>
             <Setter Property="VerticalContentAlignment" Value="Center"/>
         </Style>
+        <!-- Estrella de favorito dentro de la fila: sin marco, gris si no lo es y
+             dorada si lo es. -->
+        <Style x:Key="StarButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="2,0"/>
+            <Setter Property="Margin" Value="0,0,6,0"/>
+            <Setter Property="MinWidth" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#C8C8C8"/>
+            <Setter Property="Content" Value="&#xE734;"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="#808080"/>
+                </Trigger>
+                <DataTrigger Binding="{Binding IsFavorite}" Value="True">
+                    <Setter Property="Content" Value="&#xE735;"/>
+                    <Setter Property="Foreground" Value="#E0A32E"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
         <Style TargetType="TextBlock" x:Key="Label">
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="0,0,8,0"/>
@@ -66,9 +98,14 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBox x:Name="SearchBox" TextChanged="Filter_Changed" ToolTip="{DynamicResource Search_Tip}"/>
-                    <ComboBox x:Name="GroupFilter" Grid.Column="1" Width="170" Margin="4,0,0,0" SelectionChanged="Filter_Changed"/>
+                    <ComboBox x:Name="GroupFilter" Grid.Column="1" Width="150" Margin="4,0,0,0" SelectionChanged="Filter_Changed"/>
+                    <ToggleButton x:Name="FavFilter" Grid.Column="2" Content="" local:Icon.Glyph="&#xE735;"
+                                  MinWidth="34" Margin="4,0,0,0" Padding="6,2,0,2"
+                                  ToolTip="{DynamicResource Fav_Filter_Tip}"
+                                  Checked="Filter_Changed" Unchecked="Filter_Changed"/>
                 </Grid>
                 <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,6,0,0">
                     <Button Content="{DynamicResource Btn_OpenExternal}" Click="OpenExternal_Click" ToolTip="{DynamicResource Btn_OpenExternal_Tip}"
@@ -79,10 +116,12 @@
                 <ListView x:Name="ChannelList" SelectionChanged="ChannelList_SelectionChanged" MouseDoubleClick="ChannelList_DoubleClick">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="{DynamicResource Col_Channel}" Width="270">
+                            <GridViewColumn Header="{DynamicResource Col_Channel}" Width="292">
                                 <GridViewColumn.CellTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
+                                            <Button Style="{StaticResource StarButton}" Click="Favorite_Click"
+                                                    ToolTip="{DynamicResource Fav_Tip}"/>
                                             <!-- Casi todos los logotipos de televisión son blancos sobre fondo
                                                  transparente, así que van sobre una pastilla oscura. Sin logotipo
                                                  la pastilla es invisible, para que los nombres sigan alineados. -->
@@ -107,7 +146,7 @@
                                     </DataTemplate>
                                 </GridViewColumn.CellTemplate>
                             </GridViewColumn>
-                            <GridViewColumn Header="{DynamicResource Col_Group}" Width="170" DisplayMemberBinding="{Binding Group}"/>
+                            <GridViewColumn Header="{DynamicResource Col_Group}" Width="148" DisplayMemberBinding="{Binding Group}"/>
                         </GridView>
                     </ListView.View>
                 </ListView>

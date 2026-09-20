@@ -52,6 +52,7 @@ public static partial class M3uParser
                 case "group-title": ch.Group = val; break;
                 case "tvg-logo": ch.Logo = val; break;
                 case "tvg-name": if (ch.Name.Length == 0) ch.Name = val; break;
+                case "tvg-id": ch.TvgId = val; break;
             }
         }
 

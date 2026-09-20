@@ -10,6 +10,8 @@
     <sys:String x:Key="Btn_Settings">Settings</sys:String>
     <sys:String x:Key="Channels_Header">Channels</sys:String>
     <sys:String x:Key="Search_Tip">Search channel by name</sys:String>
+    <sys:String x:Key="Fav_Tip">Mark as favourite</sys:String>
+    <sys:String x:Key="Fav_Filter_Tip">Show favourites only</sys:String>
     <sys:String x:Key="Btn_OpenExternal">Open in VLC</sys:String>
     <sys:String x:Key="Btn_OpenExternal_Tip">Opens the channel in VLC in a separate window</sys:String>
     <sys:String x:Key="Btn_Preview">Preview</sys:String>

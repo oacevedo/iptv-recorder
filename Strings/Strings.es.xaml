@@ -10,6 +10,8 @@
     <sys:String x:Key="Btn_Settings">Ajustes</sys:String>
     <sys:String x:Key="Channels_Header">Canales</sys:String>
     <sys:String x:Key="Search_Tip">Buscar canal por nombre</sys:String>
+    <sys:String x:Key="Fav_Tip">Marcar como favorito</sys:String>
+    <sys:String x:Key="Fav_Filter_Tip">Mostrar solo los favoritos</sys:String>
     <sys:String x:Key="Btn_OpenExternal">Abrir en VLC</sys:String>
     <sys:String x:Key="Btn_OpenExternal_Tip">Abre el canal en VLC en una ventana aparte</sys:String>
     <sys:String x:Key="Btn_Preview">Vista previa</sys:String>

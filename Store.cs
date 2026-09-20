@@ -53,6 +53,32 @@ public static class Store
         File.WriteAllText(RecordingsFile, JsonSerializer.Serialize(list.ToList(), Options));
     }
 
+    private static readonly string FavoritesFile = Path.Combine(Dir, "favorites.json");
+
+    public static HashSet<string> LoadFavorites()
+    {
+        try
+        {
+            if (File.Exists(FavoritesFile))
+            {
+                var list = JsonSerializer.Deserialize<List<string>>(File.ReadAllText(FavoritesFile), Options);
+                if (list != null) return new HashSet<string>(list, StringComparer.OrdinalIgnoreCase);
+            }
+        }
+        catch { }
+        return new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+    }
+
+    public static void SaveFavorites(IEnumerable<string> keys)
+    {
+        try
+        {
+            Directory.CreateDirectory(Dir);
+            File.WriteAllText(FavoritesFile, JsonSerializer.Serialize(keys.ToList(), Options));
+        }
+        catch { }
+    }
+
     public static string? LoadChannelsCache()
     {
         try { return File.Exists(ChannelsCache) ? File.ReadAllText(ChannelsCache) : null; }

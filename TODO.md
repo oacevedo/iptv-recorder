@@ -42,10 +42,12 @@ Lista de mejoras por orden de prioridad.
   `Icon.Glyph` y una plantilla compartida en `App.xaml`. Sin dependencias ni archivos
   de imagen.
 
-## Siguientes
+- [x] **6. Favoritos**
+  Estrella en cada fila y botón para ver solo los favoritos. Se guardan en
+  `favorites.json` por el `tvg-id` del canal, que sobrevive a que el proveedor lo
+  renombre; si la lista no trae identificador se usa el nombre.
 
-- [ ] **6. Favoritos**
-  Marcar los canales que se usan de verdad y poder filtrar solo por ellos.
+## Siguientes
 
 - [ ] **7. Formato de fecha según el idioma**
   Con la interfaz en español las fechas salen en formato estadounidense, porque el

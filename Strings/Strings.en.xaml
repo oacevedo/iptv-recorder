@@ -99,6 +99,11 @@
     <!-- Scheduler -->
     <sys:String x:Key="Log_ClosedDuringRecording">The application was closed during the recording</sys:String>
     <sys:String x:Key="Log_Missed">Start time passed while the app was not running</sys:String>
+    <sys:String x:Key="Log_NoDiskSpace">Recording did not start: only {0} free on the disk</sys:String>
+    <sys:String x:Key="Log_LowDiskSpace">Warning: {0} free and this recording may need about {1}</sys:String>
+    <sys:String x:Key="Log_DiskFull">The disk is filling up ({0} free). Stopping the recording so the file is not lost.</sys:String>
+    <sys:String x:Key="Log_StoppedNoSpace">Stopped for lack of disk space ({0} MB)</sys:String>
+    <sys:String x:Key="Msg_LowDiskSpace">There are {0} free on the disk and this recording may need about {1}.&#10;&#10;Continue anyway?</sys:String>
     <sys:String x:Key="Log_WakeUnavailable">Warning: Windows will not wake the computer to record. Enable wake timers in the power plan or leave the PC on.</sys:String>
     <sys:String x:Key="Log_FfmpegMissing">ffmpeg not found. Set its path in Settings.</sys:String>
     <sys:String x:Key="Log_OutputFolderError">Could not create the output folder: {0}</sys:String>

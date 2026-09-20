@@ -99,6 +99,11 @@
     <!-- Planificador -->
     <sys:String x:Key="Log_ClosedDuringRecording">La aplicación se cerró durante la grabación</sys:String>
     <sys:String x:Key="Log_Missed">Se pasó la hora de inicio sin que la app estuviera abierta</sys:String>
+    <sys:String x:Key="Log_NoDiskSpace">No se empezó a grabar: solo quedan {0} libres en el disco</sys:String>
+    <sys:String x:Key="Log_LowDiskSpace">Aviso: quedan {0} libres y esta grabación puede necesitar unos {1}</sys:String>
+    <sys:String x:Key="Log_DiskFull">El disco se está llenando ({0} libres). Se detiene la grabación para no perder el archivo.</sys:String>
+    <sys:String x:Key="Log_StoppedNoSpace">Detenida por falta de espacio ({0} MB)</sys:String>
+    <sys:String x:Key="Msg_LowDiskSpace">Quedan {0} libres en el disco y esta grabación puede necesitar unos {1}.&#10;&#10;¿Continuar de todos modos?</sys:String>
     <sys:String x:Key="Log_WakeUnavailable">Aviso: Windows no permite despertar el equipo para grabar. Activa los temporizadores de reactivación en el plan de energía o deja el PC encendido.</sys:String>
     <sys:String x:Key="Log_FfmpegMissing">No se encontró ffmpeg. Configura la ruta en Ajustes.</sys:String>
     <sys:String x:Key="Log_OutputFolderError">No se pudo crear la carpeta de salida: {0}</sys:String>

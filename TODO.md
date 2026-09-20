@@ -23,10 +23,14 @@ Lista de mejoras por orden de prioridad.
   usuario. Al pulsar el aviso se abre la carpeta con el archivo seleccionado. Se puede
   desactivar en Ajustes.
 
-## Siguientes
+- [x] **4. Comprobar el espacio en disco**
+  Tres comprobaciones en `DiskSpace.cs`: aviso al programar si la estimación supera el
+  espacio libre, negativa a empezar por debajo de 1 GB, y parada ordenada si durante la
+  grabación el disco baja de 512 MB. La estimación supone 6 Mbps y cuenta el doble
+  cuando se convierte a MP4, porque el .ts y el .mp4 conviven unos segundos.
+  Pendiente: las dos últimas no se han podido probar llenando un disco de verdad.
 
-- [ ] **4. Comprobar el espacio en disco**
-  Dos horas en alta definición ocupan unos 5 GB. Avisar antes de empezar si no cabe.
+## Siguientes
 
 - [ ] **5. Logotipos de los canales**
   Ya se leen de la lista (`tvg-logo`) y se guardan en `Channel.Logo`, pero no se

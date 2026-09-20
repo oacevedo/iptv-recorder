@@ -379,6 +379,8 @@ public partial class MainWindow : Window
             }
         }
 
+        if (!ConfirmDiskSpace(minutes)) return null;
+
         var title = TitleBox.Text.Trim();
         return new Recording
         {
@@ -389,6 +391,22 @@ public partial class MainWindow : Window
             DurationMinutes = minutes,
             Status = RecordingStatus.Pending,
         };
+    }
+
+    /// <summary>Avisa antes de programar si el disco puede quedarse corto, que es el
+    /// momento en que aún se puede hacer sitio.</summary>
+    private bool ConfirmDiskSpace(int minutes)
+    {
+        var free = DiskSpace.Free(_settings.OutputFolder);
+        if (free is not long bytes) return true;
+
+        var tail = Math.Clamp(_settings.TailMinutes, 0, RecordingScheduler.MaxTailMinutes);
+        var needed = DiskSpace.Estimate(minutes + tail, _settings.ConvertToMp4);
+        if (bytes >= needed) return true;
+
+        return MessageBox.Show(this,
+            Loc.Get("Msg_LowDiskSpace", DiskSpace.Format(bytes), DiskSpace.Format(needed)),
+            Loc.Get("App_Title"), MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes;
     }
 
     private void Schedule_Click(object sender, RoutedEventArgs e)

@@ -14,6 +14,8 @@ public class RecordingScheduler : IDisposable
     private readonly Dictionary<Guid, Process> _procs = new();
     private readonly Dictionary<Guid, LiveRelay> _relays = new();
     private readonly HashSet<Guid> _stopRequested = new();
+    /// <summary>Motivo por el que se detuvo una grabación, cuando no fue el usuario.</summary>
+    private readonly Dictionary<Guid, string> _stopNote = new();
     private readonly DispatcherTimer _timer;
 
     public event Action<string>? Log;
@@ -64,6 +66,26 @@ public class RecordingScheduler : IDisposable
         }
 
         UpdatePower();
+        GuardDiskSpace();
+    }
+
+    /// <summary>Si el disco se está llenando, detiene las grabaciones en curso de forma
+    /// ordenada. Es preferible un archivo más corto pero íntegro a uno cortado a medio
+    /// escribir cuando ffmpeg se queda sin sitio.</summary>
+    private void GuardDiskSpace()
+    {
+        if (_procs.Count == 0) return;
+
+        var free = DiskSpace.Free(_settings().OutputFolder);
+        if (free is not long bytes || bytes >= DiskSpace.StopFloorBytes) return;
+
+        foreach (var r in _recordings.Where(r => _procs.ContainsKey(r.Id)).ToList())
+        {
+            if (_stopNote.ContainsKey(r.Id)) continue;
+            _stopNote[r.Id] = "Log_StoppedNoSpace";
+            Log?.Invoke(Loc.Get("Log_DiskFull", DiskSpace.Format(bytes)));
+            Stop(r);
+        }
     }
 
     /// <summary>Minutos de antelación con los que se despierta el equipo.</summary>
@@ -196,6 +218,24 @@ public class RecordingScheduler : IDisposable
             Changed?.Invoke();
             Finished?.Invoke(r);
             return;
+        }
+
+        // Sin espacio no merece la pena empezar: el archivo saldría cortado.
+        var free = DiskSpace.Free(s.OutputFolder);
+        if (free is long bytes)
+        {
+            if (bytes < DiskSpace.StartFloorBytes)
+            {
+                r.Status = RecordingStatus.Failed;
+                r.LastLog = Loc.Get("Log_NoDiskSpace", DiskSpace.Format(bytes));
+                Changed?.Invoke();
+                Finished?.Invoke(r);
+                return;
+            }
+
+            var needed = DiskSpace.Estimate(r.DurationMinutes + Math.Clamp(s.TailMinutes, 0, MaxTailMinutes), s.ConvertToMp4);
+            if (bytes < needed)
+                Log?.Invoke(Loc.Get("Log_LowDiskSpace", DiskSpace.Format(bytes), DiskSpace.Format(needed)));
         }
 
         var baseName = $"{r.Start:yyyy-MM-dd_HHmm} {SafeFileName(r.Title.Length > 0 ? r.Title : r.ChannelName)}";
@@ -351,6 +391,7 @@ public class RecordingScheduler : IDisposable
 
             if (size < 200_000)
             {
+                _stopNote.Remove(r.Id);
                 r.Status = requested ? RecordingStatus.Cancelled : RecordingStatus.Failed;
                 if (!requested) r.LastLog = Loc.Get("Log_ExitNoData", code, r.LastLog);
                 try { if (size == 0 && File.Exists(tsFile)) File.Delete(tsFile); } catch { }
@@ -425,6 +466,8 @@ public class RecordingScheduler : IDisposable
         r.OutputFile = file;
         r.Status = RecordingStatus.Completed;
         var mb = (size / 1024.0 / 1024.0).ToString("0");
+        if (note == null && _stopNote.TryGetValue(r.Id, out var reason)) note = Loc.Get(reason, mb);
+        _stopNote.Remove(r.Id);
         r.LastLog = note ?? Loc.Get(requested ? "Log_StoppedManually" : "Log_Completed", mb);
         Changed?.Invoke();
         Log?.Invoke(Loc.Get("Log_Finished", r.ChannelName, file));

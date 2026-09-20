@@ -13,6 +13,7 @@ Grabador de canales IPTV para Windows. Carga una lista M3U, busca el canal y pro
 - **Grabaciones**: estado en vivo de cada una. En la captura hay una completada, una en curso con tiempo y tamaño, y una pendiente para el día siguiente.
 - **Bandeja del sistema**: al cerrar o minimizar la app sigue funcionando y las grabaciones programadas se hacen igualmente.
 - **Avisos**: cuando una grabación termina o falla aparece una notificación junto al reloj. Al pulsarla se abre la carpeta con el archivo.
+- **Control del espacio**: al programar avisa si el disco puede quedarse corto, no empieza si quedan menos de 1 GB, y si el disco se llena durante la grabación la detiene de forma ordenada para que el archivo quede utilizable.
 
 ![Ajustes](docs/screenshot-settings.png)
 

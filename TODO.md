@@ -60,12 +60,26 @@ Lista de mejoras por orden de prioridad.
   conservando el archivo anterior. En Ajustes hay un botón que abre la carpeta de datos
   con el registro ya seleccionado.
 
-## Proyecto grande
+- [x] **9. Guía de programación (EPG)**
+  Lector de XMLTV en flujo (`Epg.cs`), admite gzip, guarda en disco y refresca cada 12
+  horas. La dirección se configura en Ajustes y se detecta sola si la lista la anuncia
+  con `url-tvg`. Panel de programación bajo la lista de canales, con el programa en
+  emisión resaltado; doble clic prepara la grabación con título, día, hora y duración.
 
-- [ ] **9. Guía de programación (EPG)**
-  Todos los canales de la lista traen `tvg-id`, así que el proveedor tiene datos de
-  programación. Permitiría elegir el partido de una guía en vez de escribir la hora a
-  mano, rellenando canal, inicio y duración solos.
+  El emparejamiento es **solo por identificador**, nunca por nombre: al probarlo con una
+  fuente pública, emparejar por nombre confundía "CBS East" con "CBS West" y "HBO (East)"
+  con "HBO (Pacific)", que emiten con tres horas de diferencia. Para un grabador eso es
+  peor que no tener guía.
+
+  Nota sobre el proveedor actual (starlite.best): no ofrece guía. Su API solo acepta los
+  formatos `m3u8` y `ts`, y todas las rutas de tipo EPG devuelven 404. Los identificadores
+  de sus canales tampoco coinciden con los de las fuentes públicas probadas
+  (epgshare01): cero coincidencias sobre 3111 canales. Hay que pedirle al proveedor su
+  dirección XMLTV.
+
+## Ideas sueltas
+
+- [ ] Grabaciones recurrentes (todos los días a la misma hora, o por equipo).
 
 ## Descartado por ahora
 

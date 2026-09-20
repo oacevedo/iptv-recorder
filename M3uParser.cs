@@ -7,8 +7,13 @@ public static partial class M3uParser
     [GeneratedRegex("([A-Za-z0-9\\-]+)=\"([^\"]*)\"")]
     private static partial Regex AttrRegex();
 
-    public static List<Channel> Parse(string content)
+    public static List<Channel> Parse(string content) => Parse(content, out _);
+
+    /// <summary>Además de los canales, devuelve la dirección de la guía si la cabecera
+    /// de la lista la anuncia (<c>url-tvg</c> o <c>x-tvg-url</c>).</summary>
+    public static List<Channel> Parse(string content, out string epgUrl)
     {
+        epgUrl = "";
         var channels = new List<Channel>();
         Channel? pending = null;
 
@@ -16,6 +21,17 @@ public static partial class M3uParser
         {
             var line = raw.Trim();
             if (line.Length == 0) continue;
+
+            if (line.StartsWith("#EXTM3U", StringComparison.OrdinalIgnoreCase))
+            {
+                foreach (Match m in AttrRegex().Matches(line))
+                {
+                    var key = m.Groups[1].Value.ToLowerInvariant();
+                    if (key is "url-tvg" or "x-tvg-url" && epgUrl.Length == 0)
+                        epgUrl = m.Groups[2].Value.Split(',')[0].Trim();
+                }
+                continue;
+            }
 
             if (line.StartsWith("#EXTINF", StringComparison.OrdinalIgnoreCase))
             {

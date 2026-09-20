@@ -18,6 +18,7 @@ public partial class MainWindow : Window
     private readonly ObservableCollection<Recording> _recordings;
     private readonly RecordingScheduler _scheduler;
     private readonly PreviewPlayer _external = new();
+    private readonly EpgStore _epg = new();
     private EmbeddedPreview? _preview;
     private List<Channel> _channels = new();
     private HashSet<string> _favorites = new(StringComparer.OrdinalIgnoreCase);
@@ -78,7 +79,14 @@ public partial class MainWindow : Window
         SetupTray();
 
         var cached = Store.LoadChannelsCache();
-        if (cached != null) ApplyChannels(M3uParser.Parse(cached), fromCache: true);
+        if (cached != null)
+        {
+            var channels = M3uParser.Parse(cached, out var detectedEpg);
+            AdoptEpgUrl(detectedEpg);
+            ApplyChannels(channels, fromCache: true);
+        }
+        UpdateGuideHint();
+        _ = InitGuideAsync();
 
         AppLog.Write($"--- Inicio. ffmpeg: {RecordingScheduler.ResolveFfmpeg(_settings.FfmpegPath) ?? "no encontrado"}"
                      + $" | salida: {_settings.OutputFolder}"
@@ -123,7 +131,8 @@ public partial class MainWindow : Window
                 content = await http.GetStringAsync(url);
             }
 
-            var channels = M3uParser.Parse(content);
+            var channels = M3uParser.Parse(content, out var detectedEpg);
+            AdoptEpgUrl(detectedEpg);
             if (channels.Count == 0)
             {
                 MessageBox.Show(this, Loc.Get("Msg_NoChannels"), Loc.Get("App_Title"), MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -134,6 +143,7 @@ public partial class MainWindow : Window
             _settings.M3uUrl = url;
             Store.SaveSettings(_settings);
             ApplyChannels(channels, fromCache: false);
+            _ = InitGuideAsync();
         }
         catch (Exception ex)
         {
@@ -216,6 +226,7 @@ public partial class MainWindow : Window
     {
         _selected = ChannelList.SelectedItem as Channel;
         UpdateSelectedChannelText();
+        ShowGuideForSelection();
         if (_selected != null && TitleBox.Text.Trim().Length == 0) TitleBox.Text = _selected.Name;
     }
 
@@ -228,6 +239,108 @@ public partial class MainWindow : Window
     private void ChannelList_DoubleClick(object sender, MouseButtonEventArgs e)
     {
         if (_selected != null) OpenPreview(_selected);
+    }
+
+    // ---------- Guía de programación ----------
+
+    /// <summary>Si la lista M3U anuncia su guía y no hay ninguna configurada, se adopta.</summary>
+    private void AdoptEpgUrl(string detected)
+    {
+        if (detected.Length == 0 || _settings.EpgUrl.Length > 0) return;
+        _settings.EpgUrl = detected;
+        Store.SaveSettings(_settings);
+        AppLog.Write($"Guía detectada en la lista: {detected}");
+    }
+
+    private HashSet<string> WantedChannelIds()
+        => _channels.Select(c => c.TvgId).Where(id => id.Length > 0).ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+    /// <summary>Al arrancar usa la guía guardada; solo descarga si falta o ya es vieja.</summary>
+    private async Task InitGuideAsync()
+    {
+        if (_settings.EpgUrl.Length == 0 || _channels.Count == 0) return;
+
+        var wanted = WantedChannelIds();
+        var fresh = await Task.Run(() => _epg.LoadCacheAsync(wanted, TimeSpan.FromHours(12)));
+        if (fresh)
+        {
+            ShowGuideForSelection();
+            UpdateGuideHint();
+            return;
+        }
+
+        await LoadGuideAsync(wanted);
+    }
+
+    private async void RefreshGuide_Click(object sender, RoutedEventArgs e)
+    {
+        if (_settings.EpgUrl.Length == 0)
+        {
+            Info(this, "Epg_NoUrl");
+            return;
+        }
+        await LoadGuideAsync(WantedChannelIds());
+    }
+
+    private async Task LoadGuideAsync(HashSet<string> wanted)
+    {
+        SetStatus(Loc.Get("Epg_Loading"));
+        try
+        {
+            await Task.Run(() => _epg.RefreshAsync(_settings.EpgUrl, wanted, _settings.UserAgent));
+            SetStatus(Loc.Get("Epg_Loaded", _epg.ProgrammeCount, _epg.ChannelCount));
+        }
+        catch (Exception ex)
+        {
+            SetStatus(Loc.Get("Epg_Failed", ex.Message));
+        }
+        ShowGuideForSelection();
+        UpdateGuideHint();
+    }
+
+    private void ShowGuideForSelection()
+    {
+        var programmes = _selected == null
+            ? Array.Empty<EpgProgramme>()
+            : _epg.For(_selected.TvgId).ToArray();
+
+        GuideList.ItemsSource = programmes;
+        GuideList.Visibility = programmes.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
+        GuideHint.Visibility = programmes.Length > 0 ? Visibility.Collapsed : Visibility.Visible;
+
+        if (programmes.Length > 0)
+        {
+            var now = programmes.FirstOrDefault(p => p.IsOnNow) ?? programmes[0];
+            GuideList.ScrollIntoView(now);
+        }
+        else
+        {
+            UpdateGuideHint();
+        }
+    }
+
+    private void UpdateGuideHint()
+    {
+        GuideHint.Text = _settings.EpgUrl.Length == 0
+            ? Loc.Get("Epg_NoUrl")
+            : _epg.ProgrammeCount == 0
+                ? Loc.Get("Epg_Empty")
+                : _selected == null
+                    ? Loc.Get("Epg_SelectChannel")
+                    : Loc.Get("Epg_NoData");
+    }
+
+    /// <summary>Doble clic en un programa: rellena el formulario de grabación con su
+    /// título, día, hora y duración.</summary>
+    private void Guide_DoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (GuideList.SelectedItem is not EpgProgramme p) return;
+
+        TitleBox.Text = p.Title;
+        DateBox.SelectedDate = p.Start.Date;
+        TimeBox.Text = p.Start.ToString("HH:mm");
+        DurationBox.Text = p.DurationMinutes.ToString();
+        SetStatus(Loc.Get("Epg_Filled", p.Title, p.Start.ToString("HH:mm"), p.DurationMinutes));
     }
 
     // ---------- Vista previa ----------
@@ -537,12 +650,15 @@ public partial class MainWindow : Window
         if (dlg.ShowDialog() == true)
         {
             var languageChanged = Loc.Resolve(dlg.Result.Language) != Loc.Current;
+            var epgChanged = !string.Equals(dlg.Result.EpgUrl, _settings.EpgUrl, StringComparison.OrdinalIgnoreCase);
             _settings = dlg.Result;
             _settings.M3uUrl = M3uUrlBox.Text.Trim();
             Store.SaveSettings(_settings);
             Autostart.Apply(_settings.StartWithWindows);
             if (languageChanged) ApplyLanguage(_settings.Language);
             SetStatus(Loc.Get("Status_SettingsSaved"));
+            UpdateGuideHint();
+            if (epgChanged && _settings.EpgUrl.Length > 0) _ = LoadGuideAsync(WantedChannelIds());
         }
     }
 

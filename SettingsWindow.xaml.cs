@@ -30,6 +30,7 @@ public partial class SettingsWindow : Window
         FfmpegBox.Text = current.FfmpegPath;
         PlayerBox.Text = current.PlayerPath;
         OutputBox.Text = current.OutputFolder;
+        EpgBox.Text = current.EpgUrl;
         UserAgentBox.Text = current.UserAgent;
         LeadBox.Text = current.LeadSeconds.ToString();
         TailBox.Text = current.TailMinutes.ToString();
@@ -127,6 +128,7 @@ public partial class SettingsWindow : Window
         Result = new AppSettings
         {
             M3uUrl = Result.M3uUrl,
+            EpgUrl = EpgBox.Text.Trim(),
             FfmpegPath = ffmpeg,
             PlayerPath = player,
             OutputFolder = output,

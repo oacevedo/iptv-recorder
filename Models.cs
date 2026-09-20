@@ -104,6 +104,8 @@ public class Recording : INotifyPropertyChanged
 public class AppSettings
 {
     public string M3uUrl { get; set; } = "";
+    /// <summary>Dirección de la guía en formato XMLTV. Vacío significa sin guía.</summary>
+    public string EpgUrl { get; set; } = "";
     public string FfmpegPath { get; set; } = "";
     public string PlayerPath { get; set; } = "";
     public string OutputFolder { get; set; } =

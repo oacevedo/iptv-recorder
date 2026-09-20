@@ -7,6 +7,7 @@ Grabador de canales IPTV para Windows. Carga una lista M3U, busca el canal y pro
 ## Qué hace
 
 - **Lista de canales** (izquierda): se carga desde el enlace M3U del proveedor y queda en caché. Búsqueda por nombre y filtro por grupo. Cada canal muestra su logotipo, que se descarga solo cuando la fila aparece en pantalla y se guarda para las siguientes veces. La estrella de cada fila marca favoritos, y el botón de estrella junto al filtro de grupo deja ver solo esos.
+- **Programación** (abajo a la izquierda): si tu proveedor ofrece una guía en formato XMLTV, aquí aparecen los programas del canal seleccionado, con el que está emitiendo ahora resaltado. Doble clic en un programa y la grabación queda preparada con su título, día, hora y duración.
 - **Vista previa** (arriba a la derecha): reproduce el canal dentro de la app antes de grabar, con volumen y silencio. "Abrir en VLC" lo abre en una ventana aparte.
 - **Ver mientras se graba**: el botón "Ver grabación" muestra lo que se está grabando en ese momento. No abre una segunda conexión al proveedor, así que no interfiere con la grabación aunque tu servicio solo permita una conexión. Si ya estabas viendo el canal cuando arranca su grabación programada, la imagen vuelve sola a los pocos segundos.
 - **Nueva grabación**: título, fecha, hora y duración. "Programar" la deja en cola; "Grabar ahora" empieza al momento.
@@ -49,12 +50,19 @@ Para añadir otro idioma: copia `Strings\Strings.en.xaml` como `Strings\Strings.
 - **Carpeta de salida**: por defecto `Vídeos\IPTV`.
 - **Reproductor**: el que se usa para "Abrir en VLC". Vacío significa VLC si está instalado, y si no, ffplay. La vista previa incrustada no depende de esto: usa LibVLC, que va incluido con la app.
 - **Empezar antes**: segundos de margen antes de la hora indicada (por defecto 60) para que el stream enganche.
+- **Guía (XMLTV)**: dirección del archivo de programación de tu proveedor, normal o comprimido en gzip. Si la lista M3U la anuncia con `url-tvg`, se rellena sola. Vacío significa sin guía.
 - **Margen al final**: minutos que se graban después de la hora de fin (por defecto 10), para que los descuentos y las prórrogas no corten el partido. Pon 0 para desactivarlo.
 - **Convertir a MP4**: al terminar, remuxea el `.ts` a `.mp4` sin recodificar y borra el `.ts`.
 - **Iniciar con Windows**: arranca minimizado en la bandeja al iniciar sesión, para no perder grabaciones.
 - **Impedir la suspensión**: bloquea la suspensión mientras se graba y despierta el equipo antes de una grabación programada. Activado por defecto.
 - **Avisar al terminar o fallar**: notificación junto al reloj. Activado por defecto. No avisa si eres tú quien detiene la grabación.
 - **User-Agent**: algunos proveedores solo aceptan reproductores conocidos. Por defecto se identifica como VLC.
+
+## Sobre la guía de programación
+
+La guía empareja canales **solo por identificador** (`tvg-id`), nunca por nombre. Emparejar por nombre parece razonable pero confunde las versiones Este y Oeste del mismo canal, que emiten con horas de diferencia; una grabación programada con esos datos grabaría otra cosa.
+
+Eso significa que la guía solo funciona con un archivo XMLTV cuyos identificadores coincidan con los de tu lista, normalmente el que sirve tu propio proveedor. Si no tienes uno, pídeselo: casi todos lo ofrecen aunque no lo anuncien en la lista.
 
 ## Limitaciones
 

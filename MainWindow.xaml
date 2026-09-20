@@ -56,6 +56,33 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+        <!-- Botón pequeño solo de icono, sin marco. -->
+        <Style x:Key="MiniButton" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="4,0"/>
+            <Setter Property="Margin" Value="0"/>
+            <Setter Property="MinWidth" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="#707070"/>
+            <Setter Property="Content" Value="&#xE72C;"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="#1060C0"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
         <Style TargetType="TextBlock" x:Key="Label">
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Margin" Value="0,0,8,0"/>
@@ -92,7 +119,14 @@
                 <ColumnDefinition Width="3*" MinWidth="480"/>
             </Grid.ColumnDefinitions>
 
-            <DockPanel Grid.Column="0">
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*" MinHeight="200"/>
+                    <RowDefinition Height="6"/>
+                    <RowDefinition Height="2*" MinHeight="130"/>
+                </Grid.RowDefinitions>
+
+            <DockPanel Grid.Row="0">
                 <TextBlock DockPanel.Dock="Top" Text="{DynamicResource Channels_Header}" FontWeight="Bold" Margin="0,0,0,4"/>
                 <Grid DockPanel.Dock="Top" Margin="0,0,0,6">
                     <Grid.ColumnDefinitions>
@@ -151,6 +185,42 @@
                     </ListView.View>
                 </ListView>
             </DockPanel>
+
+            <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" Background="Transparent"/>
+
+            <!-- Guía de programación del canal seleccionado -->
+            <DockPanel Grid.Row="2">
+                <Grid DockPanel.Dock="Top" Margin="0,0,0,4">
+                    <TextBlock Text="{DynamicResource Epg_Header}" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <Button HorizontalAlignment="Right" Style="{StaticResource MiniButton}"
+                            Click="RefreshGuide_Click" ToolTip="{DynamicResource Epg_Refresh_Tip}"/>
+                </Grid>
+                <TextBlock x:Name="GuideHint" DockPanel.Dock="Top" Foreground="Gray" TextWrapping="Wrap"
+                           Margin="0,2,0,0" Text="{DynamicResource Epg_NoUrl}"/>
+                <ListView x:Name="GuideList" MouseDoubleClick="Guide_DoubleClick" Visibility="Collapsed"
+                          ToolTip="{DynamicResource Epg_List_Tip}">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding IsOnNow}" Value="True">
+                                    <Setter Property="Background" Value="#E8F1FB"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Margin="0,2" ToolTip="{Binding Description}">
+                                <TextBlock Text="{Binding TimeRange}" FontWeight="SemiBold" Foreground="#666"/>
+                                <TextBlock Text="{Binding Title}" TextTrimming="CharacterEllipsis"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </DockPanel>
+
+            </Grid>
 
             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" Background="Transparent"/>
 

@@ -181,6 +181,13 @@ public partial class MainWindow : Window
         CollectionViewSource.GetDefaultView(ChannelList.ItemsSource).Refresh();
     }
 
+    /// <summary>Cada fila pide su logotipo al hacerse visible, de modo que con miles de
+    /// canales solo se descargan los que se están mirando.</summary>
+    private void ChannelLogo_Loaded(object sender, RoutedEventArgs e)
+    {
+        if (sender is FrameworkElement { DataContext: Channel channel }) LogoCache.Request(channel);
+    }
+
     private void ChannelList_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         _selected = ChannelList.SelectedItem as Channel;

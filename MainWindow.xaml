@@ -9,9 +9,16 @@
     <Window.Resources>
         <local:RecordingStatusConverter x:Key="StatusConv"/>
         <Style TargetType="Button">
-            <Setter Property="Padding" Value="12,4"/>
+            <Setter Property="Padding" Value="10,4"/>
             <Setter Property="Margin" Value="4,0,0,0"/>
-            <Setter Property="MinWidth" Value="90"/>
+            <Setter Property="MinWidth" Value="80"/>
+            <Setter Property="ContentTemplate" Value="{StaticResource IconContent}"/>
+        </Style>
+        <Style TargetType="ToggleButton">
+            <Setter Property="Padding" Value="10,4"/>
+            <Setter Property="Margin" Value="8,0,0,0"/>
+            <Setter Property="MinWidth" Value="80"/>
+            <Setter Property="ContentTemplate" Value="{StaticResource IconContent}"/>
         </Style>
         <Style TargetType="TextBox">
             <Setter Property="Padding" Value="4,3"/>
@@ -35,9 +42,11 @@
             </Grid.ColumnDefinitions>
             <TextBlock Text="{DynamicResource M3u_Label}" Style="{StaticResource Label}"/>
             <TextBox x:Name="M3uUrlBox" Grid.Column="1" ToolTip="{DynamicResource M3u_Tip}"/>
-            <Button x:Name="LoadButton" Grid.Column="2" Content="{DynamicResource Btn_LoadList}" Click="LoadList_Click"/>
+            <Button x:Name="LoadButton" Grid.Column="2" Content="{DynamicResource Btn_LoadList}" Click="LoadList_Click"
+                    local:Icon.Glyph="&#xE72C;"/>
             <TextBlock x:Name="ChannelCountText" Grid.Column="3" VerticalAlignment="Center" Margin="12,0" Foreground="Gray"/>
-            <Button Grid.Column="4" Content="{DynamicResource Btn_Settings}" Click="Settings_Click"/>
+            <Button Grid.Column="4" Content="{DynamicResource Btn_Settings}" Click="Settings_Click"
+                    local:Icon.Glyph="&#xE713;"/>
         </Grid>
 
         <StatusBar DockPanel.Dock="Bottom" Margin="0,8,0,0">
@@ -62,13 +71,42 @@
                     <ComboBox x:Name="GroupFilter" Grid.Column="1" Width="170" Margin="4,0,0,0" SelectionChanged="Filter_Changed"/>
                 </Grid>
                 <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,6,0,0">
-                    <Button Content="{DynamicResource Btn_OpenExternal}" Click="OpenExternal_Click" ToolTip="{DynamicResource Btn_OpenExternal_Tip}"/>
-                    <Button Content="{DynamicResource Btn_Preview}" Click="Preview_Click" FontWeight="Bold" ToolTip="{DynamicResource Btn_Preview_Tip}"/>
+                    <Button Content="{DynamicResource Btn_OpenExternal}" Click="OpenExternal_Click" ToolTip="{DynamicResource Btn_OpenExternal_Tip}"
+                            local:Icon.Glyph="&#xE8A7;"/>
+                    <Button Content="{DynamicResource Btn_Preview}" Click="Preview_Click" FontWeight="Bold" ToolTip="{DynamicResource Btn_Preview_Tip}"
+                            local:Icon.Glyph="&#xE768;"/>
                 </StackPanel>
                 <ListView x:Name="ChannelList" SelectionChanged="ChannelList_SelectionChanged" MouseDoubleClick="ChannelList_DoubleClick">
                     <ListView.View>
                         <GridView>
-                            <GridViewColumn Header="{DynamicResource Col_Channel}" Width="270" DisplayMemberBinding="{Binding Name}"/>
+                            <GridViewColumn Header="{DynamicResource Col_Channel}" Width="270">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <!-- Casi todos los logotipos de televisión son blancos sobre fondo
+                                                 transparente, así que van sobre una pastilla oscura. Sin logotipo
+                                                 la pastilla es invisible, para que los nombres sigan alineados. -->
+                                            <Border Width="30" Height="30" Margin="0,1,8,1" CornerRadius="3">
+                                                <Border.Style>
+                                                    <Style TargetType="Border">
+                                                        <Setter Property="Background" Value="#2B2B2B"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding LogoImage}" Value="{x:Null}">
+                                                                <Setter Property="Background" Value="Transparent"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Border.Style>
+                                                <!-- Se pide al aparecer la fila, no antes: la lista está virtualizada. -->
+                                                <Image Margin="2" Stretch="Uniform"
+                                                       Source="{Binding LogoImage}" Loaded="ChannelLogo_Loaded"
+                                                       RenderOptions.BitmapScalingMode="HighQuality"/>
+                                            </Border>
+                                            <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
                             <GridViewColumn Header="{DynamicResource Col_Group}" Width="170" DisplayMemberBinding="{Binding Group}"/>
                         </GridView>
                     </ListView.View>
@@ -95,8 +133,10 @@
                             <StackPanel Grid.Column="1" Orientation="Horizontal">
                                 <TextBlock Text="{DynamicResource Volume_Label}" Style="{StaticResource Label}"/>
                                 <Slider x:Name="VolumeSlider" Width="110" Minimum="0" Maximum="100" Value="70" VerticalAlignment="Center" ValueChanged="Volume_Changed"/>
-                                <ToggleButton x:Name="MuteButton" Content="{DynamicResource Btn_Mute}" Padding="12,4" Margin="8,0,0,0" MinWidth="70" Click="Mute_Click"/>
-                                <Button Content="{DynamicResource Btn_Stop}" Click="StopPreview_Click"/>
+                                <ToggleButton x:Name="MuteButton" Content="{DynamicResource Btn_Mute}" Click="Mute_Click"
+                                              local:Icon.Glyph="&#xE74F;"/>
+                                <Button Content="{DynamicResource Btn_Stop}" Click="StopPreview_Click"
+                                        local:Icon.Glyph="&#xE71A;"/>
                             </StackPanel>
                         </Grid>
                         <Border Background="Black" Height="270" CornerRadius="2">
@@ -139,8 +179,10 @@
                         </StackPanel>
 
                         <StackPanel Grid.Row="3" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,8,0,0">
-                            <Button Content="{DynamicResource Btn_RecordNow}" Click="RecordNow_Click"/>
-                            <Button Content="{DynamicResource Btn_Schedule}" Click="Schedule_Click" FontWeight="Bold"/>
+                            <Button Content="{DynamicResource Btn_RecordNow}" Click="RecordNow_Click"
+                                    local:Icon.Glyph="&#xE7C8;"/>
+                            <Button Content="{DynamicResource Btn_Schedule}" Click="Schedule_Click" FontWeight="Bold"
+                                    local:Icon.Glyph="&#xE787;"/>
                         </StackPanel>
                     </Grid>
                 </GroupBox>
@@ -148,12 +190,18 @@
                 <DockPanel Grid.Row="2">
                     <TextBlock DockPanel.Dock="Top" Text="{DynamicResource Recordings_Header}" FontWeight="Bold" Margin="0,0,0,4"/>
                     <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,6,0,0">
-                        <Button Content="{DynamicResource Btn_WatchRecording}" Click="WatchRecording_Click" ToolTip="{DynamicResource Btn_WatchRecording_Tip}"/>
-                        <Button Content="{DynamicResource Btn_Stop}" Click="Stop_Click"/>
-                        <Button Content="{DynamicResource Btn_Delete}" Click="Delete_Click"/>
-                        <Button Content="{DynamicResource Btn_ClearFinished}" Click="ClearFinished_Click"/>
-                        <Button Content="{DynamicResource Btn_OpenFile}" Click="OpenFile_Click"/>
-                        <Button Content="{DynamicResource Btn_OpenFolder}" Click="OpenFolder_Click"/>
+                        <Button Content="{DynamicResource Btn_WatchRecording}" Click="WatchRecording_Click" ToolTip="{DynamicResource Btn_WatchRecording_Tip}"
+                                local:Icon.Glyph="&#xE7B3;"/>
+                        <Button Content="{DynamicResource Btn_Stop}" Click="Stop_Click"
+                                local:Icon.Glyph="&#xE71A;"/>
+                        <Button Content="{DynamicResource Btn_Delete}" Click="Delete_Click"
+                                local:Icon.Glyph="&#xE74D;"/>
+                        <Button Content="{DynamicResource Btn_ClearFinished}" Click="ClearFinished_Click"
+                                local:Icon.Glyph="&#xE75C;"/>
+                        <Button Content="{DynamicResource Btn_OpenFile}" Click="OpenFile_Click"
+                                local:Icon.Glyph="&#xE7C3;"/>
+                        <Button Content="{DynamicResource Btn_OpenFolder}" Click="OpenFolder_Click"
+                                local:Icon.Glyph="&#xEC50;"/>
                     </StackPanel>
                     <DataGrid x:Name="RecordingsGrid" AutoGenerateColumns="False" IsReadOnly="True"
                               SelectionMode="Single" CanUserAddRows="False" HeadersVisibility="Column"

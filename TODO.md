@@ -30,11 +30,19 @@ Lista de mejoras por orden de prioridad.
   cuando se convierte a MP4, porque el .ts y el .mp4 conviven unos segundos.
   Pendiente: las dos últimas no se han podido probar llenando un disco de verdad.
 
-## Siguientes
+- [x] **5. Logotipos de los canales**
+  `LogoCache.cs` los descarga solo cuando la fila aparece (la lista está virtualizada),
+  los guarda en `%APPDATA%\IptvRecorder\logos` y recuerda los que fallan para no
+  reintentarlos: alrededor del 40% de las direcciones del proveedor dan 404. Casi todos
+  los logotipos son blancos sobre fondo transparente, así que van sobre una pastilla
+  oscura; sin logotipo la pastilla es invisible y los nombres siguen alineados.
 
-- [ ] **5. Logotipos de los canales**
-  Ya se leen de la lista (`tvg-logo`) y se guardan en `Channel.Logo`, pero no se
-  muestran. Con más de 3000 canales, buscar por icono es más rápido.
+- [x] **Iconos en los botones**
+  Con la tipografía `Segoe MDL2 Assets` que trae Windows, mediante la propiedad adjunta
+  `Icon.Glyph` y una plantilla compartida en `App.xaml`. Sin dependencias ni archivos
+  de imagen.
+
+## Siguientes
 
 - [ ] **6. Favoritos**
   Marcar los canales que se usan de verdad y poder filtrar solo por ellos.

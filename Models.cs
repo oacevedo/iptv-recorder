@@ -2,15 +2,26 @@ using System.ComponentModel;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
+using System.Windows.Media;
 
 namespace IptvRecorder;
 
-public class Channel
+public class Channel : INotifyPropertyChanged
 {
     public string Name { get; set; } = "";
     public string Group { get; set; } = "";
     public string Logo { get; set; } = "";
     public string Url { get; set; } = "";
+
+    private ImageSource? _logoImage;
+    /// <summary>Logotipo ya descargado, o null mientras no lo esté.</summary>
+    public ImageSource? LogoImage
+    {
+        get => _logoImage;
+        set { _logoImage = value; PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(LogoImage))); }
+    }
+
+    public event PropertyChangedEventHandler? PropertyChanged;
 
     // Nombre que exponen los lectores de pantalla y la automatización de la interfaz.
     public override string ToString() => Name;
